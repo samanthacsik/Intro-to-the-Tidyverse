@@ -24,6 +24,13 @@ ca_pheno <- site_phenometrics_data %>%
 ```
 
 ```{r select columns that you want}
-
+select_columns <- ca_pheno %>% 
+  select(1:4, Genus, Species, Common_Name, Phenophase_Description, Mean_First_Yes_Year, Mean_First_Yes_DOY)
 ```
+
+```{r convert values to NA}
+convert_NA <- select_columns %>% 
+  mutate(Mean_First_Yes_Year = replace(Mean_First_Yes_Year, -9999, NA))
+```
+
 
