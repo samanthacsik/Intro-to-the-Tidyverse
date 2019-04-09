@@ -1,0 +1,29 @@
+---
+title: "wrangling using plant phenology data"
+author: "An Bui"
+date: "4/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+```{r}
+site_phenometrics_data <- read_csv(here("data","site_phenometrics_data.csv"))
+```
+
+```{r filter California observations only}
+ca_pheno <- site_phenometrics_data %>%
+  filter(State == "CA")
+```
+
+```{r select columns that you want}
+
+```
+
