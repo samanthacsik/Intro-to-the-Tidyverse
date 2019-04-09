@@ -1,0 +1,27 @@
+---
+title: 'Into to the Tidyverse: R-Ladies SB May 2019'
+author: "Sam Csik & An Bui"
+date: "15 May 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What is the tidyverse?
+
+The tidyverse is a collection of R packages designed for data science that share an underlying design philosophy, grammar, and data structures. Using the tidyverse can help to streamline your data manipulation and visualisations (and make this often-daunting process actually enjoyable). [Read more about it here!](https://www.tidyverse.org/) 
+
+## What packages are in the tidyverse?
+
+| package | usage | primary functions 
+|-----------|-----------------------------------------|---------------------------------------------------------| 
+| [ggplot2](https://ggplot2.tidyverse.org/) | create graphics | too many to cover here, but we recommend reviewing [Ch 3: Data visualisation](https://r4ds.had.co.nz/data-visualisation.html) in R for Data Science (Wickam & Grolemund 2017)
+| [dplyr](https://dplyr.tidyverse.org/) | data maniupulation | mutate(), filter(), select(), summarize(), arrange(), group_by()
+| [tidyr](https://tidyr.tidyverse.org/) | transform data to tidy format | gather(), spread()
+| [readr](https://readr.tidyverse.org/) | read in rectangular data (e.g. csv) | read_csv()
+| [purrr](https://purrr.tidyverse.org/) | facilitates work with functions & vectors | map()
+| [tibble](https://tibble.tidyverse.org/) | create tibbles (modernized data frames) | as_tibble(), tibble(), tribble()
+| [stringr](https://stringr.tidyverse.org/) | facilitates work with strings | str_detect, str_count, str_subset(), str_locate(), str_extract(), str_match(), str_replace(), str_split()
+| [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
