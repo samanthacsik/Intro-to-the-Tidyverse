@@ -1,8 +1,10 @@
 ---
-title: 'Into to the Tidyverse: R-Ladies SB May 2019'
+title: 'Intro to the Tidyverse: R-Ladies SB May 2019'
 author: "Sam Csik & An Bui"
 date: "15 May 2019"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +19,7 @@ The tidyverse is a collection of R packages designed for data science that share
 
 | package | usage | primary functions 
 |-----------|-----------------------------------------|---------------------------------------------------------| 
-| [ggplot2](https://ggplot2.tidyverse.org/) | create graphics | too many to cover here, but we recommend reviewing [Ch 3: Data visualisation](https://r4ds.had.co.nz/data-visualisation.html) in R for Data Science (Wickam & Grolemund 2017)
+| [ggplot2](https://ggplot2.tidyverse.org/) | create graphics | too much to cover here, but we recommend reviewing [Ch 3: Data visualisation](https://r4ds.had.co.nz/data-visualisation.html) in R for Data Science (Wickam & Grolemund 2017)
 | [dplyr](https://dplyr.tidyverse.org/) | data maniupulation | mutate(), filter(), select(), summarize(), arrange(), group_by()
 | [tidyr](https://tidyr.tidyverse.org/) | transform data to tidy format | gather(), spread()
 | [readr](https://readr.tidyverse.org/) | read in rectangular data (e.g. csv) | read_csv()
@@ -25,3 +27,187 @@ The tidyverse is a collection of R packages designed for data science that share
 | [tibble](https://tibble.tidyverse.org/) | create tibbles (modernized data frames) | as_tibble(), tibble(), tribble()
 | [stringr](https://stringr.tidyverse.org/) | facilitates work with strings | str_detect, str_count, str_subset(), str_locate(), str_extract(), str_match(), str_replace(), str_split()
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
+
+### Don't have the tidyverse yet?
+#### Install using the following code:
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+#### Let's also install the "nycflights13" dataset to practice wrangling and plotting data: 
+
+```{r, eval = FALSE}
+install.packages("nycflights13")
+```
+
+### Load the tidyverse & datasets (we'll be using some built-in datasets later on as well):
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(nycflights13)
+```
+
+### Let's learn the tidyverse!
+
+We'll use the **nycflights13** dataset, representing on-time data for all flights departing from NYC (i.e. JFK, LGA, EWR) in 2013.  
+
+First, explore the data. 
+
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
+head(flights) # prints first 10 rows
+tail(flights) # prints last 10 rows
+str(flights) # pritns data structure
+unique(flights$carrier) # prints unique observations within a variable
+```
+
+**Remember:** You can find more information about this dataset by typing "?flights" into the console.
+
+We will do some wrangling on the original flights dataset to determine which airline and from which NYC airport to book a flight with. Let's pretend:  
+
+(a) I have milage plans with United Airlines (I actually have beef with United, so this is entirely hypothetical), JetBlue, and American Airlines, so I'll only consider flights with these carriers
+(b) I plan to visit family & friends in Los Angeles
+(c) I want to choose a carrier that will get me there without delays (if possible)
+
+```{r}
+my_flight_choice <- flights %>% 
+  select(carrier, dep_delay, arr_delay, origin, dest) %>% 
+  filter(carrier == "UA" | carrier == "AA" | carrier == "B6") %>% 
+  filter(dest == "LAX") %>% 
+  group_by(carrier, origin, dest) %>% 
+  summarise(
+    avg_dep_delay = mean(dep_delay),
+    avg_arr_delay = mean(arr_delay)
+  )
+```
+
+```{r}
+# data <- flights %>% 
+#   select(carrier, dep_delay) %>% 
+#   filter(carrier == "UA" | carrier == "AA" | carrier == "B6") %>% 
+#   mutate(
+#     carrier_name = case_when(
+#       carrier == "UA" ~ "United Air Lines",
+#       carrier == "AA" ~ "American Airlines", 
+#       carrier == "B6" ~ "JetBlue Airways"
+#     )
+#   ) %>% 
+#   group_by(carrier_name) %>% 
+#   summarize(
+#     avg_delay = mean(dep_delay)
+#   )
+
+```
+
+### Tidyverse functions cheat sheet:
+
+Below are reproducible examples of commonly used tidyverse functions using made-up data (below). 
+
+**Remember:** you can string together multiple functions using the pipe operator **%>%**. R will evaluate the current function based off the the results of prior function calls.
+
+Let's first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)
+```{r, eval = FALSE}
+# NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
+pizza_data <- tribble(
+  ~name,    ~'2017',   ~'2018',   ~'2019',
+  "Sam",       25,        20,        16,
+  "An",        20,        15,        11,
+  "Allison",   18,        17,        10,
+  "Julie",     19,        10,        14,
+  "Jamie",     21,        13,        14
+  )
+```
+
+We'll first want to transform 'pizza_data' into tidy (long) format:
+
+**gather():** transforms data from wide to long format
+```{r, eval = FALSE}
+tidy_pizza <- pizza_data %>% 
+  gather('2017', '2018', '2019', key = "year", value = "pizzas_eaten")
+```
+
+Now let's use our tidy data to practice some other functions.
+
+**arrange():** order observations as specified (default = alphabetical or ascending)
+```{r, eval = FALSE}
+ordered_names <- tidy_pizza %>% 
+  arrange(name) # for descending alphabetical order, use "arrange(desc(names))"
+
+ordered_num_pizzas <- tidy_pizza %>% 
+  arrange(pizzas_eaten) # descending order, use "arrange(-pizzas_eaten)"
+```
+
+**filter():** selects observations within columns
+```{r, eval = FALSE}
+sam_an <- tidy_pizza %>% 
+  filter(name == "Sam" | name == "An") # "|" tells R to filter any observations that match "Sam" OR "An"
+```
+
+**group_by():** groups observations such that data operations are performed at the level of the group
+```{r, eval = FALSE}
+grouped_names <- tidy_pizzas %>% 
+  group_by(names) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
+```
+
+**mutate():** 
+```{r, eval = FALSE}
+# use mutate() to coerce a variable to a different data type
+name_as_factor <- tidy_pizza %>% 
+  mutate(name = as.factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
+
+# use mutate() to caluclate a new value using existing observations and add this new value to a new column
+pizzas_per_month <- tidy_pizza %>% 
+  mutate(pizzas_per_month = pizzas_eaten/12)
+
+# use mutate in conjunction with case_when to add a column based off existing observations
+fav_pizza <- tidy_pizza %>% 
+  mutate(
+    fav_pizza = case_when(
+      name == "Sam" ~ "Buffalo Chicken",
+      name == "An" ~ "Pepperoni",
+      name == "Allison" ~ "Cheese",
+      name == "Julie" ~ "Margherita",
+      name == "Jamie" ~ "Veggie"
+    )
+  )
+
+# use mutate in conjunction with ifelse, where if the observation in the 'name' column matches "Sam," report "1". If not, report "0"
+binary <- tidy_pizza %>% 
+  mutate(binary = ifelse(name == "Sam", "1", "0")) 
+```
+
+**pull():** pulls out a single variable from a df and saves it as a vector
+```{r, eval = FALSE}
+pizza_eaten_vec <- tidy_pizza %>% 
+  pull(pizzas_eaten)
+```
+
+**rename():** rename a column
+```{r, eval = FALSE}
+renamed_pizzas <- tidy_pizza %>% 
+  rename(total_pizzas = pizzas_eaten)
+```
+
+**select():** select columns to retain and specify their order
+```{r, eval = FALSE}
+names_pizzas <- tidy_pizza %>% 
+  select(name, pizzas_eaten)
+```
+
+**spread():** transform data from long to wide format
+```{r, eval = FALSE}
+# let's convert our 'tidy_data' back to wide format using spread()
+back_to_wide <- tidy_pizza %>% 
+  spread('year', 'pizzas_eaten')
+```
+
+**summarize():** calculate summary statistics
+```{r, eval = FALSE}
+pizza_summary <- tidy_pizza %>% 
+  group_by(name) %>% 
+  summarize(
+    avg_pizzas = mean(pizzas_eaten), # feel free to substitute any summary stat function here!!
+    max_pizza = max(pizzas_eaten),
+    min_pizza = min(pizzas_eaten) # and add as many as you want to calculate!
+  )
+```
