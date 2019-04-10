@@ -50,54 +50,14 @@ library(nycflights13)
 
 ### Let's learn the tidyverse!
 
-We'll use the **nycflights13** dataset, representing on-time data for all flights departing from NYC (i.e. JFK, LGA, EWR) in 2013.  
 
-First, explore the data. 
 
-```{r, message = FALSE, warning = FALSE, eval = FALSE}
-head(flights) # prints first 10 rows
-tail(flights) # prints last 10 rows
-str(flights) # pritns data structure
-unique(flights$carrier) # prints unique observations within a variable
-```
 
-**Remember:** You can find more information about this dataset by typing "?flights" into the console.
 
-We will do some wrangling on the original flights dataset to determine which airline and from which NYC airport to book a flight with. Let's pretend:  
 
-(a) I have milage plans with United Airlines (I actually have beef with United, so this is entirely hypothetical), JetBlue, and American Airlines, so I'll only consider flights with these carriers
-(b) I plan to visit family & friends in Los Angeles
-(c) I want to choose a carrier that will get me there without delays (if possible)
 
-```{r}
-my_flight_choice <- flights %>% 
-  select(carrier, dep_delay, arr_delay, origin, dest) %>% 
-  filter(carrier == "UA" | carrier == "AA" | carrier == "B6") %>% 
-  filter(dest == "LAX") %>% 
-  group_by(carrier, origin, dest) %>% 
-  summarise(
-    avg_dep_delay = mean(dep_delay),
-    avg_arr_delay = mean(arr_delay)
-  )
-```
 
-```{r}
-# data <- flights %>% 
-#   select(carrier, dep_delay) %>% 
-#   filter(carrier == "UA" | carrier == "AA" | carrier == "B6") %>% 
-#   mutate(
-#     carrier_name = case_when(
-#       carrier == "UA" ~ "United Air Lines",
-#       carrier == "AA" ~ "American Airlines", 
-#       carrier == "B6" ~ "JetBlue Airways"
-#     )
-#   ) %>% 
-#   group_by(carrier_name) %>% 
-#   summarize(
-#     avg_delay = mean(dep_delay)
-#   )
 
-```
 
 ### Tidyverse functions cheat sheet:
 
