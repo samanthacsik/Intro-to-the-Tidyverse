@@ -44,8 +44,33 @@ convert_NA$newdate <- as.Date(dates$Mean_First_Yes_DOY, origin = convert_NA$orig
 ```{r getting date info from newdate column and getting rid of other date columns}
 new_dates <- convert_NA %>% 
   mutate(year = year(newdate),
-         month = month(newdate),
-         day = day(newdate)) %>% 
+         month = month(newdate)) %>% 
   select(-(9:12))
 ```
+
+```{r make a plot of Joshua tree phenology}
+#### wrangle the data ####
+# make a new df where the genus and species columns are together
+merge_sp <- new_dates %>% 
+  unite("Genus_Species", Genus, Species)
+
+# filter data frame to only include Joshua trees
+jt <- merge_sp %>% 
+  filter(Genus_Species == "Yucca_brevifolia")
+
+# set levels for flowering descriptions
+levels(jt$Phenophase_Description) <- c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")
+
+# summarize the number of times each observation occurs
+jt_summary <- jt %>% 
+  group_by(month, Phenophase_Description) %>% 
+  tally()
+
+#### plot in ggplot ####
+ggplot(jt_summary, aes(x = month, 
+                       y = n, 
+                       fill = Phenophase_Description)) +
+  geom_col(position = "dodge")
+```
+
 
