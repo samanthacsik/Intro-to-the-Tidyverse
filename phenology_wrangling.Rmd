@@ -54,12 +54,12 @@ new_dates <- convert_NA %>%
 merge_sp <- new_dates %>% 
   unite("Genus_Species", Genus, Species)
 
+# set levels for flowering descriptions
+levels(merge_sp$Phenophase_Description) <- c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")
+
 # filter data frame to only include Joshua trees
 jt <- merge_sp %>% 
   filter(Genus_Species == "Yucca_brevifolia")
-
-# set levels for flowering descriptions
-levels(jt$Phenophase_Description) <- c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")
 
 # summarize the number of times each observation occurs
 jt_summary <- jt %>% 
@@ -73,4 +73,45 @@ ggplot(jt_summary, aes(x = month,
   geom_col(position = "dodge")
 ```
 
+```{r make a plot of creosote bush}
+# filter data for creosote bush
+cb <- merge_sp %>% 
+  filter(Common_Name == "creosote bush")
+
+# summarize the number of times each observation occurs
+cb_summary <- cb %>% 
+  group_by(month, Phenophase_Description) %>% 
+  tally()
+
+#### plot in ggplot ####
+ggplot(cb_summary, aes(x = month,
+                       y = n,
+                       fill = Phenophase_Description)) +
+  geom_col(position = "dodge")
+```
+
+```{r plot creosote bush and joshua tree phenology together}
+#### combine the two dataframes ####
+# add a new column to each data frame so that you know which is which
+cb_summary_name <- cb_summary %>% 
+  mutate(species = "creosote bush")
+
+jt_summary_name <- jt_summary %>% 
+  mutate(species = "joshua tree")
+
+# combine the dataframes
+combined <- bind_rows(cb_summary_name, jt_summary_name) %>% 
+  group_by(species, Phenophase_Description)
+
+# # filter by open flowers
+# open_flowers <- combined %>% 
+#   filter(Phenophase_Description == "Open flowers")
+
+ggplot(combined, aes(x = month,
+                     y = n,
+                     color = species,
+                     shape = Phenophase_Description)) +
+  geom_point() +
+  geom_line()
+```
 
