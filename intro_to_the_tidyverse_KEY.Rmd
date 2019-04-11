@@ -188,9 +188,21 @@ dim(pheno_data) # view dimensions of the df
 head(pheno_data) # view first 10 rows of df
 tail(pheno_data) # view last 10 rows of df
 str(pheno_data) # view data structure of df
+colnames(pheno_data) # view the columns of df
 ```
 
-### Wrangle & Plot:
+### Wrangle:
+
+This dataset is huge, but we want to wrangle it so that it only includes the information that we're interested in. In order, we'll
+
+a. filter for California observations  
+b. select the columns we want  
+c. rename columns  
+d. unite columns  
+e. remove any NA values  
+f. set the levels for a character vector.  
+
+#### a. filtering for California observations
 
 This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
 
@@ -199,12 +211,16 @@ ca_pheno <- pheno_data %>%
   filter(State == "CA")
 ```
 
-This is a bit more manageable (`r nrow(phenometrics_data)` rows as opposed to `r nrow(ca_pheno)` rows) but there are still a lot of columns that we don't necessarily need. Let's select the columns that we want.
+#### b. select the columns we want
+
+This is a bit more manageable (`r nrow(phenometrics_data)` rows as opposed to `r nrow(ca_pheno)` rows) but there are still a lot of columns that we don't necessarily need. Let's select the columns we're interested in.
 
 ```{r}
 select_columns <- ca_pheno %>% 
   select(1:4, Genus, Species, Common_Name, Phenophase_Description, Year, Month)
 ```
+
+#### c. rename columns
 
 To make this even more manageable, we can change the column names to something easier (i.e. shorter to type).
 
@@ -213,12 +229,16 @@ rename_columns <- select_columns %>%
   rename(Pheno = Phenophase_Description)
 ```
 
+#### d. unite columns
+
 We can also combine the `Genus` and `Species` columns, because they shouldn't be separate.
 
 ```{r}
 unite_columns <- rename_columns %>% 
   unite("Genus_Species", Genus, Species)
 ```
+
+#### e. remove any NA values
 
 If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the Year and Month entries. We can take out any rows with `NA` in either of these columns.
 
@@ -227,7 +247,14 @@ remove_NA <- unite_columns %>%
   drop_na(Year, Month)
 ```
 
-Now, only the rows with complete year and month information are included!
+#### f. set the levels for a character vector
+
+Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Pheno` column to reflect that for downstream plotting. To do this, we use `mutate()` and from `forcats` `fct_relevel()`.
+
+```{r}
+relevel <- remove_NA %>% 
+  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
+```
 
 We split each wrangling step up into a separate data frame, but you could have done all these commands together in one chunk. 
 
@@ -237,8 +264,11 @@ ca_pheno_all <- pheno_data %>%
   select(1:4, Genus, Species, Common_Name, Phenophase_Description, Year, Month) %>% 
   rename(Pheno = Phenophase_Description) %>%
   unite("Genus_Species", Genus, Species) %>% 
-  drop_na(Year, Month)
+  drop_na(Year, Month) %>% 
+  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
 ```
+
+### Plot:
 
 With this data set, we're ready to subset for desert species we're interested in. Let's say we're especially interested in Joshua trees (*Yucca brevifolia*).
 
