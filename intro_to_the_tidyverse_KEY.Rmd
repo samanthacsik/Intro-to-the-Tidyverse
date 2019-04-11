@@ -213,7 +213,7 @@ ca_obs <- pheno_data %>%
 
 #### b. select the columns we want
 
-This is a bit more manageable (`r nrow(phenometrics_data)` rows as opposed to `r nrow(ca_pheno)` rows) but there are still a lot of columns that we don't necessarily need. Let's select the columns we're interested in.
+This is a bit more manageable (`r nrow(pheno_data)` rows as opposed to `r nrow(ca_obs)` rows) but there are still a lot of columns that we don't necessarily need. Let's select the columns we're interested in.
 
 ```{r}
 select_columns <- ca_obs %>% 
