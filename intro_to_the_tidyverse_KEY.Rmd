@@ -20,7 +20,7 @@ The tidyverse is a collection of R packages designed for data science that share
 | package | usage | primary functions 
 |-----------|-----------------------------------------|---------------------------------------------------------| 
 | [ggplot2](https://ggplot2.tidyverse.org/) | create graphics | too much to cover here, but we recommend reviewing [Ch 3: Data visualisation](https://r4ds.had.co.nz/data-visualisation.html) in R for Data Science (Wickam & Grolemund 2017)
-| [dplyr](https://dplyr.tidyverse.org/) | data maniupulation | mutate(), filter(), select(), summarize(), arrange(), group_by()
+| [dplyr](https://dplyr.tidyverse.org/) | data maniupulation | arrange(), filter(), group_by(), mutate(), select(), summarize(), tally()
 | [tidyr](https://tidyr.tidyverse.org/) | transform data to tidy format | gather(), spread()
 | [readr](https://readr.tidyverse.org/) | read in rectangular data (e.g. csv) | read_csv()
 | [purrr](https://purrr.tidyverse.org/) | facilitates work with functions & vectors | map()
@@ -42,7 +42,7 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
-## **Tidyverse & data wrangling functions cheat sheet:**
+## **Data wrangling cheat sheet:**
 
 Below are reproducible examples of commonly used tidyverse functions.
 
@@ -155,32 +155,80 @@ pizza_summary <- tidy_pizza %>%
   )
 ```
 
+**tally():** sum values across groups
+```{r}
+tallied_pizza <- tidy_pizza %>% 
+  group_by(name) %>% 
+  tally(pizzas_eaten)
+```
+
 ## **Now let's practice!**
 
 ### In addition to the tidyverse, we'll need to load a couple more packages:
 
 ```{r, message = FALSE, warning = FALSE}
+library(tidyverse) # if you haven't loaded it already
 library(here) # from the last R-Ladies Meetup!
-library(lubridate) # to work more easily with dates
+#library(lubridate) # to work more easily with dates
 ```
 
 ### Load the data: 
 
-In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA-National Phenology Network](https://www.usanpn.org/home).
+In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA -- National Phenology Network](https://www.usanpn.org/home).
 
 ```{r, message = FALSE, warning = TRUE}
+
+pheno_data <- read_csv(here::here("data","phenometrics_data.csv"))
+
 phenometrics_data <- read_csv(here::here("data","phenometrics_data.csv"))
+
 ```
 
-Let's pretend we're trying to plan a getaway to the desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
+Let's pretend we're trying to plan a getaway to the California desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
 
 ### Explore: 
 
 ```{r, eval = FALSE}
+
+dim(pheno_data) # view dimensions of the df
+head(pheno_data) # view first 10 rows of df
+tail(pheno_data) # view last 10 rows of df
+str(pheno_data) # view data structure of df
+```
+
+
+
+
+
+
+
+
+
+
+
+### Wrangle & Plot:
+
+In order to wrangle our data, we will first
+
+```{r}
 head(phenometrics_data) # view first 10 rows of data
 tail(phenometrics_data) # view last 10 rows of data
 str(phenometrics_data) # view data structure of df
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
 
@@ -260,11 +308,108 @@ ggplot(relevel, aes(x = Month,
 ```
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Wrangle:
 
 (a) select relevant columns
 (b) filter for only California data
 (c) rename long-winded variable names
-(d) remove missing values with NA
+(d) merge genus and species into a single column
+(e) remove missing values with NA
 
+
+```{r, message = FALSE}
+ca_pheno <- pheno_data %>%
+  select(1:5, Genus, Species, Common_Name, Phenophase_Description, year, month) %>% 
+  filter(State == "CA")  %>% 
+  rename(pheno = Phenophase_Description) %>% 
+  unite("Genus_Species", Genus, Species, sep = "_", remove = TRUE)  %>% # merge genus and species into same column
+  na_if(-9999) %>% 
+  drop_na()
+```
+
+```{r}
+ca_pheno <- site_phenometrics_data %>%
+  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Mean_First_Yes_Year, Mean_First_Yes_DOY) %>%
+  filter(State == "CA")  %>%
+  rename(pheno = Phenophase_Description,
+         year = Mean_First_Yes_Year,
+         day = Mean_First_Yes_DOY) %>%
+  na_if(-9999)
+
+```
+
+We love **joshua trees** and **creosote bushes** and are most interested in when these plants are blooming. Let's fist isolate data for each of these species by
+
+(a) filtering for only the species of interest
+(b) finding the total counts for these species for each month throughout the year
+
+```{r, message = FALSE}
+
+# data for just joshua trees
+joshua_tree <- ca_pheno %>% 
+  filter(Genus_Species == "Yucca_brevifolia") %>% 
+  group_by(month, pheno) %>% 
+  tally()
+
+# column plot of joshua trees
+joshua_tree_plot <- ggplot(joshua_tree, aes(x = month, y = n, fill = pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
+  geom_col(position = "dodge") # "dodge" creates separate columns for each pheno, rather than a stacked column
+
+# data for just creosote bush
+creosote_bush <- ca_pheno %>% 
+  filter(Common_Name == "creosote bush") %>% 
+  group_by(month, pheno) %>% 
+  summarize( 
+    total_counts = length(pheno) # same as tally!
+  )
+
+# column plot of creosote bushes
+creosote_plot <- ggplot(creosote_bush, aes(x = month, y = total_counts, fill = pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
+  geom_col(position = "dodge") 
+```
+
+```{r}
+# add column to 'joshua_tree' with name; rename 'n' to 'total_counts' so that it matches 'creosote_bush'
+joshua_tree_name <- joshua_tree %>% 
+  mutate(species = "joshua tree") %>% 
+  rename(total_counts = n)
+
+# add column to 'creosote_bush' with name
+creosote_bush_name <- creosote %>% 
+  mutate(species = "creosote bush") 
+
+# combine 'joshua_tree_name' and 'creosote_bush_name'
+jt_cb <- bind_rows(joshua_tree_name, creosote_bush_name) %>% 
+  group_by(species, pheno)
+
+# plot
+ggplot(jt_cb, aes(x = month, y = total_counts, color = species, shape = pheno)) +
+  geom_point(size = 3) +
+  geom_line()
+```
 

@@ -16,7 +16,7 @@ library(lubridate)
 ```
 
 ```{r}
-site_phenometrics_data <- read_csv(here("data","site_phenometrics_data.csv"))
+site_phenometrics_data <- read_csv(here::here("data","site_phenometrics_data.csv"))
 ```
 
 ```{r clean up site phenometrics data for use}
@@ -53,15 +53,15 @@ convert_NA <- select_columns %>%
 
 ```{r getting date from day of year}
 # might be something to to at the beginning, because date wrangling is not really in the scope of this whole thing
-convert_NA$origin <- as.Date(paste0(convert_NA$Mean_First_Yes_Year, "-01-01", tz = "UTC"))
-convert_NA$newdate <- as.Date(dates$Mean_First_Yes_DOY, origin = convert_NA$origin, tz = "UTC")
+#convert_NA$origin <- as.Date(paste0(convert_NA$Mean_First_Yes_Year, "-01-01", tz = "UTC"))
+#convert_NA$newdate <- as.Date(dates$Mean_First_Yes_DOY, origin = convert_NA$origin, tz = "UTC")
 ```
 
 ```{r getting date info from newdate column and getting rid of other date columns}
-new_dates <- convert_NA %>% 
-  mutate(year = year(newdate),
-         month = month(newdate)) %>% 
-  select(-(9:12))
+# new_dates <- convert_NA %>% 
+#   mutate(year = year(newdate),
+#          month = month(newdate)) %>% 
+#   select(-(9:12))
 ```
 
 ```{r make a plot of Joshua tree phenology}
