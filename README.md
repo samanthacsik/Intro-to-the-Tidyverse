@@ -10,8 +10,6 @@ Leaders: Sam Csik, An Bui
 ## Data source
 All flower phenology data is from the [USA Phenology Network](https://www.usanpn.org/usa-national-phenology-network). In this workshop, we work with species that occur on [Serrano](https://www.sanmanuel-nsn.gov/Culture/Cultural-Overview), [Cahuilla](http://www.aguacaliente.org/content/History%20and%20Culture/), [Mojave](https://www.fortmojaveindiantribe.com/), and [Chemehuevi](http://www.chemehuevi.net/history-culture/) ancestral land, or [Joshua Tree National Park](https://www.nps.gov/jotr/index.htm).
 
-<img src = "figures/joshua_tree_np.jpg" alt = "Our 'study site'." style = "float" width = "600"/>
-
 ## Species of interest
 We're interested in blooming desert plants:
 
