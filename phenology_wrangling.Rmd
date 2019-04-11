@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(here)
 library(lubridate)
+library(date)
 ```
 
 ```{r}
@@ -23,16 +24,27 @@ site_phenometrics_data <- read_csv(here::here("data","site_phenometrics_data.csv
 #### getting date from day of year ####
 site_phenometrics_data$origin <- as.Date(paste0(site_phenometrics_data$Mean_First_Yes_Year, "-01-01"), tz = "UTC") - days(1)
 
-site_phenometrics_data$newdate <- as.Date(dates$Mean_First_Yes_DOY, origin = site_phenometrics_data$origin, tz = "UTC")
+site_phenometrics_data$newdate <- as.Date(site_phenometrics_data$Mean_First_Yes_DOY, origin = site_phenometrics_data$origin, tz = "UTC")
 
 #### add year and month columns ####
 final_df <- site_phenometrics_data %>% 
   mutate(Year = year(newdate),
          Month_no = month(newdate),
          Month = case_when(
-           Month_no = 1 ~ "January"
+           Month_no == "1" ~ "January",
+           Month_no == "2" ~ "February",
+           Month_no == "3" ~ "March",
+           Month_no == "4" ~ "April",
+           Month_no == "5" ~ "May",
+           Month_no == "6" ~ "June",
+           Month_no == "7" ~ "July",
+           Month_no == "8" ~ "August",
+           Month_no == "9" ~ "September",
+           Month_no == "10" ~ "October", 
+           Month_no == "11" ~ "November",
+           Month_no == "12" ~ "December"
          )) %>% 
-  select((1:16), year, month, (40:55))
+  select((1:16), Year, Month, (40:55))
 
 #### write csv ####
 write_csv(final_df, "phenometrics_data.csv")
