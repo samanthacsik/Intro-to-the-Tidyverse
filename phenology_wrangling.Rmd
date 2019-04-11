@@ -19,6 +19,22 @@ library(lubridate)
 site_phenometrics_data <- read_csv(here("data","site_phenometrics_data.csv"))
 ```
 
+```{r clean up site phenometrics data for use}
+#### getting date from day of year ####
+site_phenometrics_data$origin <- as.Date(paste0(site_phenometrics_data$Mean_First_Yes_Year, "-01-01"), tz = "UTC") - days(1)
+
+site_phenometrics_data$newdate <- as.Date(dates$Mean_First_Yes_DOY, origin = site_phenometrics_data$origin, tz = "UTC")
+
+#### add year and month columns ####
+final_df <- site_phenometrics_data %>% 
+  mutate(year = year(newdate),
+         month = month(newdate)) %>% 
+  select((1:16), year, month, (40:55))
+
+#### write csv ####
+write_csv(final_df, "phenometrics_data.csv")
+```
+
 ```{r filter California observations only}
 ca_pheno <- site_phenometrics_data %>%
   filter(State == "CA")
