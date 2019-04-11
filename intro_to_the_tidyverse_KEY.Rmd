@@ -169,7 +169,6 @@ tallied_pizza <- tidy_pizza %>%
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse) # if you haven't loaded it already
 library(here) # from the last R-Ladies Meetup!
-#library(lubridate) # to work more easily with dates
 ```
 
 ### Load the data: 
@@ -177,11 +176,7 @@ library(here) # from the last R-Ladies Meetup!
 In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA -- National Phenology Network](https://www.usanpn.org/home).
 
 ```{r, message = FALSE, warning = TRUE}
-
 pheno_data <- read_csv(here::here("data","phenometrics_data.csv"))
-
-phenometrics_data <- read_csv(here::here("data","phenometrics_data.csv"))
-
 ```
 
 Let's pretend we're trying to plan a getaway to the California desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
@@ -189,55 +184,22 @@ Let's pretend we're trying to plan a getaway to the California desert and want t
 ### Explore: 
 
 ```{r, eval = FALSE}
-
 dim(pheno_data) # view dimensions of the df
 head(pheno_data) # view first 10 rows of df
 tail(pheno_data) # view last 10 rows of df
 str(pheno_data) # view data structure of df
 ```
 
-
-
-
-
-
-
-
-
-
-
 ### Wrangle & Plot:
-
-In order to wrangle our data, we will first
-
-```{r}
-head(phenometrics_data) # view first 10 rows of data
-tail(phenometrics_data) # view last 10 rows of data
-str(phenometrics_data) # view data structure of df
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
 
 ```{r}
-ca_pheno <- phenometrics_data %>% 
+ca_pheno <- pheno_data %>% 
   filter(State == "CA")
 ```
 
-This is a bit more manageable (`r nrow(phenometrics_data)` as opposed to `r nrow(ca_pheno)`) but there are still a lot of columns that we don't necessarily need. Let's select the columns that we want.
+This is a bit more manageable (`r nrow(phenometrics_data)` rows as opposed to `r nrow(ca_pheno)` rows) but there are still a lot of columns that we don't necessarily need. Let's select the columns that we want.
 
 ```{r}
 select_columns <- ca_pheno %>% 
@@ -265,7 +227,18 @@ remove_NA <- unite_columns %>%
   drop_na(Year, Month)
 ```
 
-Now, only the rows with complete year and month information are included. 
+Now, only the rows with complete year and month information are included!
+
+We split each wrangling step up into a separate data frame, but you could have done all these commands together in one chunk. 
+
+```{r}
+ca_pheno_all <- pheno_data %>% 
+  filter(State == "CA") %>%
+  select(1:4, Genus, Species, Common_Name, Phenophase_Description, Year, Month) %>% 
+  rename(Pheno = Phenophase_Description) %>%
+  unite("Genus_Species", Genus, Species) %>% 
+  drop_na(Year, Month)
+```
 
 With this data set, we're ready to subset for desert species we're interested in. Let's say we're especially interested in Joshua trees (*Yucca brevifolia*).
 
@@ -305,62 +278,6 @@ ggplot(relevel, aes(x = Month,
                        y = n, 
                        fill = Pheno)) +
   geom_col(position = "dodge")
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Wrangle:
-
-(a) select relevant columns
-(b) filter for only California data
-(c) rename long-winded variable names
-(d) merge genus and species into a single column
-(e) remove missing values with NA
-
-
-```{r, message = FALSE}
-ca_pheno <- pheno_data %>%
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, year, month) %>% 
-  filter(State == "CA")  %>% 
-  rename(pheno = Phenophase_Description) %>% 
-  unite("Genus_Species", Genus, Species, sep = "_", remove = TRUE)  %>% # merge genus and species into same column
-  na_if(-9999) %>% 
-  drop_na()
-```
-
-```{r}
-ca_pheno <- site_phenometrics_data %>%
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Mean_First_Yes_Year, Mean_First_Yes_DOY) %>%
-  filter(State == "CA")  %>%
-  rename(pheno = Phenophase_Description,
-         year = Mean_First_Yes_Year,
-         day = Mean_First_Yes_DOY) %>%
-  na_if(-9999)
-
 ```
 
 We love **joshua trees** and **creosote bushes** and are most interested in when these plants are blooming. Let's fist isolate data for each of these species by
