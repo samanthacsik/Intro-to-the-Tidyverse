@@ -241,11 +241,11 @@ jt_tally <- jt_sn %>%
   tally()
 ```
 
-The last thing we need to do is set the levels for variables in the `pheno` column. We can do this with `mutate()`.
+The last thing we need to do is set the levels for variables in the `pheno` column. We can do this with `mutate()` and `fct_relevel` in the `forcats` package.
 
 ```{r}
 relevel <- jt_tally %>% 
-  mutate(Pheno = factor(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
+  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers")))
 ```
 
 Like `group_by`, this doesn't change the structure of the data frame. It's a way of telling R, "There's an order to the objects in this character vector that I want you to remember."
