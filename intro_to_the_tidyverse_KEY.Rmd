@@ -177,7 +177,11 @@ library(here) # from the last R-Ladies Meetup!
 In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA -- National Phenology Network](https://www.usanpn.org/home).
 
 ```{r, message = FALSE, warning = TRUE}
+
 pheno_data <- read_csv(here::here("data","phenometrics_data.csv"))
+
+phenometrics_data <- read_csv(here::here("data","phenometrics_data.csv"))
+
 ```
 
 Let's pretend we're trying to plan a getaway to the California desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
@@ -185,21 +189,147 @@ Let's pretend we're trying to plan a getaway to the California desert and want t
 ### Explore: 
 
 ```{r, eval = FALSE}
+
 dim(pheno_data) # view dimensions of the df
 head(pheno_data) # view first 10 rows of df
 tail(pheno_data) # view last 10 rows of df
 str(pheno_data) # view data structure of df
 ```
 
+
+
+
+
+
+
+
+
+
+
 ### Wrangle & Plot:
 
 In order to wrangle our data, we will first
+
+```{r}
+head(phenometrics_data) # view first 10 rows of data
+tail(phenometrics_data) # view last 10 rows of data
+str(phenometrics_data) # view data structure of df
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
+
+```{r}
+ca_pheno <- phenometrics_data %>% 
+  filter(State == "CA")
+```
+
+This is a bit more manageable (`r nrow(phenometrics_data)` as opposed to `r nrow(ca_pheno)`) but there are still a lot of columns that we don't necessarily need. Let's select the columns that we want.
+
+```{r}
+select_columns <- ca_pheno %>% 
+  select(1:4, Genus, Species, Common_Name, Phenophase_Description, Year, Month)
+```
+
+To make this even more manageable, we can change the column names to something easier (i.e. shorter to type).
+
+```{r}
+rename_columns <- select_columns %>% 
+  rename(Pheno = Phenophase_Description)
+```
+
+We can also combine the `Genus` and `Species` columns, because they shouldn't be separate.
+
+```{r}
+unite_columns <- rename_columns %>% 
+  unite("Genus_Species", Genus, Species)
+```
+
+If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the Year and Month entries. We can take out any rows with `NA` in either of these columns.
+
+```{r}
+remove_NA <- unite_columns %>% 
+  drop_na(Year, Month)
+```
+
+Now, only the rows with complete year and month information are included. 
+
+With this data set, we're ready to subset for desert species we're interested in. Let's say we're especially interested in Joshua trees (*Yucca brevifolia*).
+
+```{r}
+jt_sn <- remove_NA %>% 
+  filter(Genus_Species == "Yucca_brevifolia")
+
+jt_cn <- remove_NA %>% 
+  filter(Common_Name == "Joshua tree")
+```
+
+Look at the `jt_cn` or `jt_sn` data frame. Since we want to time our trip to coincide with the highest occurrence of flowering Joshua trees, we can summarize the counts of each occurrence.
+
+```{r}
+jt_summarize <- jt_sn %>% 
+  group_by(Month, Pheno) %>% 
+  summarize(sum = n())
+
+jt_tally <- jt_sn %>% 
+  group_by(Month, Pheno) %>% 
+  tally()
+```
+
+The last thing we need to do is set the levels for variables in the `pheno` column. We can do this with `mutate()` and `fct_relevel` in the `forcats` package.
+
+```{r}
+relevel <- jt_tally %>% 
+  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers")))
+```
+
+Like `group_by`, this doesn't change the structure of the data frame. It's a way of telling R, "There's an order to the objects in this character vector that I want you to remember."
+
+Now, we can make a basic plot in `ggplot2` that puts month on the x-axis and count of each phenophase on the y-axis.
+
+```{r}
+ggplot(relevel, aes(x = Month, 
+                       y = n, 
+                       fill = Pheno)) +
+  geom_col(position = "dodge")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Wrangle:
 
 (a) select relevant columns
 (b) filter for only California data
 (c) rename long-winded variable names
 (d) merge genus and species into a single column
 (e) remove missing values with NA
+
 
 ```{r, message = FALSE}
 ca_pheno <- pheno_data %>%
@@ -209,6 +339,17 @@ ca_pheno <- pheno_data %>%
   unite("Genus_Species", Genus, Species, sep = "_", remove = TRUE)  %>% # merge genus and species into same column
   na_if(-9999) %>% 
   drop_na()
+```
+
+```{r}
+ca_pheno <- site_phenometrics_data %>%
+  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Mean_First_Yes_Year, Mean_First_Yes_DOY) %>%
+  filter(State == "CA")  %>%
+  rename(pheno = Phenophase_Description,
+         year = Mean_First_Yes_Year,
+         day = Mean_First_Yes_DOY) %>%
+  na_if(-9999)
+
 ```
 
 We love **joshua trees** and **creosote bushes** and are most interested in when these plants are blooming. Let's fist isolate data for each of these species by
