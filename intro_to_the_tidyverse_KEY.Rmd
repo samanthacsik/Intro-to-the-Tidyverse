@@ -292,7 +292,10 @@ joshua_tree <- ca_pheno %>%
 
 # column plot of joshua trees
 joshua_tree_plot <- ggplot(joshua_tree, aes(x = Month, y = n, fill = Pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
-  geom_col(position = "dodge") # "dodge" creates separate columns for each pheno, rather than a stacked column
+  geom_col(position = "dodge") + # "dodge" creates separate columns for each pheno, rather than a stacked column
+  labs(y = "Total counts",
+       title = "Joshua tree phenology",
+       fill = "Phenophase")
 
 joshua_tree_plot
 
@@ -306,28 +309,11 @@ creosote_bush <- ca_pheno %>%
 
 # column plot of creosote bushes
 creosote_plot <- ggplot(creosote_bush, aes(x = Month, y = total_counts, fill = Pheno)) +
-  geom_col(position = "dodge") 
+  geom_col(position = "dodge") +
+  labs(y = "Total counts",
+       title = "Creosote bush phenology",
+       fill = "Phenophase")
 
 creosote_plot
-```
-
-```{r}
-# add column to 'joshua_tree' with name; rename 'n' to 'total_counts' so that it matches 'creosote_bush'
-joshua_tree_name <- joshua_tree %>% 
-  mutate(species = "joshua tree") %>% 
-  rename(total_counts = n)
-
-# add column to 'creosote_bush' with name
-creosote_bush_name <- creosote %>% 
-  mutate(species = "creosote bush") 
-
-# combine 'joshua_tree_name' and 'creosote_bush_name'
-jt_cb <- bind_rows(joshua_tree_name, creosote_bush_name) %>% 
-  group_by(species, pheno)
-
-# plot
-ggplot(jt_cb, aes(x = month, y = total_counts, color = species, shape = pheno)) +
-  geom_point(size = 3) +
-  geom_line()
 ```
 
