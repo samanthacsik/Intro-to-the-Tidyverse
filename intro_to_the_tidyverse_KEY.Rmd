@@ -41,7 +41,7 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
-## **Tidyverse & data wrangling functions cheat sheet:**
+## **Data wrangling cheat sheet:**
 
 Below are reproducible examples of commonly used tidyverse functions.
 
@@ -171,7 +171,7 @@ In celebration of this year's superbloom, we'll be exploring phenometric data of
 site_phenometrics_data <- read_csv(here::here("data","site_phenometrics_data.csv"))
 ```
 
-Let's pretend we're trying to plan a getaway to the desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
+Let's pretend we're trying to plan a getaway to the California desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
 
 ### Explore: 
 

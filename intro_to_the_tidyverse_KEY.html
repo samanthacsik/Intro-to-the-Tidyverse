@@ -203,8 +203,8 @@ $(document).ready(function () {
 <pre class="r"><code>library(tidyverse)</code></pre>
 </div>
 </div>
-<div id="tidyverse-data-wrangling-functions-cheat-sheet" class="section level2">
-<h2><strong>Tidyverse &amp; data wrangling functions cheat sheet:</strong></h2>
+<div id="data-wrangling-cheat-sheet" class="section level2">
+<h2><strong>Data wrangling cheat sheet:</strong></h2>
 <p>Below are reproducible examples of commonly used tidyverse functions.</p>
 <p><strong>Remember:</strong> you can string together multiple functions using the pipe operator <strong>%&gt;%</strong>. R will evaluate the current function based off the the results of prior function calls.</p>
 <p>Let’s first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)</p>
@@ -291,7 +291,7 @@ library(lubridate) # to work more easily with dates</code></pre>
 <h3>Load the data:</h3>
 <p>In celebration of this year’s superbloom, we’ll be exploring phenometric data of flowering California plants from the <a href="https://www.usanpn.org/home">USA-National Phenology Network</a>.</p>
 <pre class="r"><code>site_phenometrics_data &lt;- read_csv(here::here(&quot;data&quot;,&quot;site_phenometrics_data.csv&quot;))</code></pre>
-<p>Let’s pretend we’re trying to plan a getaway to the desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants.</p>
+<p>Let’s pretend we’re trying to plan a getaway to the California desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants.</p>
 </div>
 <div id="explore" class="section level3">
 <h3>Explore:</h3>
