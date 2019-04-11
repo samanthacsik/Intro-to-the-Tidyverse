@@ -27,8 +27,11 @@ site_phenometrics_data$newdate <- as.Date(dates$Mean_First_Yes_DOY, origin = sit
 
 #### add year and month columns ####
 final_df <- site_phenometrics_data %>% 
-  mutate(year = year(newdate),
-         month = month(newdate)) %>% 
+  mutate(Year = year(newdate),
+         Month_no = month(newdate),
+         Month = case_when(
+           Month_no = 1 ~ "January"
+         )) %>% 
   select((1:16), year, month, (40:55))
 
 #### write csv ####
