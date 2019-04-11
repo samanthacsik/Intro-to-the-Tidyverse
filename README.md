@@ -19,9 +19,9 @@ All flower phenology data is from the [USA Phenology Network](https://www.usanpn
 ## Species of interest
 We're interested in blooming desert plants:
 
-|     common name     |      scientific name      |                     flowers                        |
+|     Common name     |      Scientific name      |                     Flowers                        |
 |---------------------|---------------------------|----------------------------------------------------| 
-|     Joshua tree     |     *Yucca brevifolia*    |<img src="figures/joshua_tree.jpg" width="400"/>    |
-|    Creosote bush    |    *Larrea tridentata*    |<img src="figures/creosote_bush.jpeg" width="400"/> |
-|     Mojave yucca    |     *Yucca schidigera*    |<img src="figures/mojave_yucca.jpg" width="400/>"   |
+|     Joshua tree     |     *Yucca brevifolia*    |<img src="figures/joshua_tree.jpg" width="500"/>    |
+|    Creosote bush    |    *Larrea tridentata*    |<img src="figures/creosote_bush.jpeg" width="500"/> |
+|     Mojave yucca    |     *Yucca schidigera*    |<img src="figures/mojave_yucca.jpg" width="500/>    |
 
