@@ -41,7 +41,7 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
-### Tidyverse & data wrangling functions cheat sheet:
+## **Tidyverse & data wrangling functions cheat sheet:**
 
 Below are reproducible examples of commonly used tidyverse functions.
 
@@ -154,7 +154,7 @@ pizza_summary <- tidy_pizza %>%
   )
 ```
 
-## **Now let's learn the tidyverse!**
+## **Now let's practice!**
 
 ### In addition to the tidyverse, we'll need to load a couple more packages:
 
@@ -167,13 +167,13 @@ library(lubridate) # to work more easily with dates
 
 In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA-National Phenology Network](https://www.usanpn.org/home).
 
-Let's pretend we're trying to plan a trip to the desert to see the flowering plants. We want to time our trip so that we have the greatest chance to find fully bloomed plants. 
-
 ```{r, message = FALSE, warning = TRUE}
 site_phenometrics_data <- read_csv(here::here("data","site_phenometrics_data.csv"))
 ```
 
-### Explore the data: 
+Let's pretend we're trying to plan a getaway to the desert and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
+
+### Explore: 
 
 ```{r, eval = FALSE}
 head(site_phenometrics_data) # view first 10 rows of data
@@ -181,7 +181,7 @@ tail(site_phenometrics_data) # view last 10 rows of data
 str(site_phenometrics_data) # view data structure of df
 ```
 
-### Wrangle the data:
+### Wrangle:
 
 (a) select relevant columns
 (b) filter for only California data
@@ -197,3 +197,5 @@ ca_pheno <- site_phenometrics_data %>%
          day = Mean_First_Yes_DOY) %>% 
   na_if(-9999)
 ```
+
+
