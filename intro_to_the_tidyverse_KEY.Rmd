@@ -291,7 +291,7 @@ joshua_tree <- ca_pheno %>%
   tally()
 
 # column plot of joshua trees
-joshua_tree_plot <- ggplot(joshua_tree, aes(x = Month, y = n, fill = Pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
+joshua_tree_plot <- ggplot(joshua_tree, aes(x = Month, y = n, fill = Pheno)) +
   geom_col(position = "dodge") + # "dodge" creates separate columns for each pheno, rather than a stacked column
   labs(y = "Total counts",
        title = "Joshua tree phenology",
