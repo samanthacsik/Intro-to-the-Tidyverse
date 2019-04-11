@@ -189,7 +189,6 @@ Let's pretend we're trying to plan a getaway to the California desert and want t
 ### Explore: 
 
 ```{r, eval = FALSE}
-
 dim(pheno_data) # view dimensions of the df
 head(pheno_data) # view first 10 rows of df
 tail(pheno_data) # view last 10 rows of df
@@ -338,18 +337,8 @@ ca_pheno <- pheno_data %>%
   rename(pheno = Phenophase_Description) %>% 
   unite("Genus_Species", Genus, Species, sep = "_", remove = TRUE)  %>% # merge genus and species into same column
   na_if(-9999) %>% 
-  drop_na()
-```
-
-```{r}
-ca_pheno <- site_phenometrics_data %>%
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Mean_First_Yes_Year, Mean_First_Yes_DOY) %>%
-  filter(State == "CA")  %>%
-  rename(pheno = Phenophase_Description,
-         year = Mean_First_Yes_Year,
-         day = Mean_First_Yes_DOY) %>%
-  na_if(-9999)
-
+  drop_na() %>% 
+  mutate(month_name = as.factor(month.abb[month]))
 ```
 
 We love **joshua trees** and **creosote bushes** and are most interested in when these plants are blooming. Let's fist isolate data for each of these species by
@@ -400,5 +389,18 @@ jt_cb <- bind_rows(joshua_tree_name, creosote_bush_name) %>%
 ggplot(jt_cb, aes(x = month, y = total_counts, color = species, shape = pheno)) +
   geom_point(size = 3) +
   geom_line()
+```
+
+```{r}
+joshua_tree_np_flowers <- ca_pheno %>% 
+  filter(Common_Name == "Joshua tree" | Common_Name == "creosote bush" | Common_Name == "Mojave yucca") %>% 
+  group_by(month_name, Common_Name, pheno) %>% 
+  tally()
+
+ggplot(joshua_tree_np_flowers, aes(x = month_name, y = n, fill = pheno)) +
+  geom_col(position = "dodge") +
+  fct_relevel("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", ) %>% 
+  facet_wrap(~Common_Name) +
+  labs(x = "Month", y = "Counts")
 ```
 
