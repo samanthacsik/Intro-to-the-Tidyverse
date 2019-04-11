@@ -130,11 +130,11 @@ $(document).ready(function () {
 
 
 <div id="what-is-the-tidyverse" class="section level2">
-<h2>What is the tidyverse?</h2>
+<h2><strong>What is the tidyverse?</strong></h2>
 <p>The tidyverse is a collection of R packages designed for data science that share an underlying design philosophy, grammar, and data structures. Using the tidyverse can help to streamline your data manipulation and visualisations (and make this often-daunting process actually enjoyable). <a href="https://www.tidyverse.org/">Read more about it here!</a></p>
 </div>
 <div id="what-packages-are-in-the-tidyverse" class="section level2">
-<h2>What packages are in the tidyverse?</h2>
+<h2><strong>What packages are in the tidyverse?</strong></h2>
 <table>
 <colgroup>
 <col width="10%"></col>
@@ -191,28 +191,20 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
-<div id="dont-have-the-tidyverse-yet" class="section level3">
-<h3>Don’t have the tidyverse yet?</h3>
-<div id="install-using-the-following-code" class="section level4">
-<h4>Install using the following code:</h4>
+</div>
+<div id="dont-have-the-tidyverse-yet" class="section level2">
+<h2><strong>Don’t have the tidyverse yet?</strong></h2>
+<div id="install-using-the-following-code" class="section level3">
+<h3>Install using the following code:</h3>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
 </div>
-<div id="lets-also-install-the-nycflights13-dataset-to-practice-wrangling-and-plotting-data" class="section level4">
-<h4>Let’s also install the “nycflights13” dataset to practice wrangling and plotting data:</h4>
-<pre class="r"><code>install.packages(&quot;nycflights13&quot;)</code></pre>
+<div id="load-the-tidyverse" class="section level3">
+<h3>Load the tidyverse:</h3>
+<pre class="r"><code>library(tidyverse)</code></pre>
 </div>
-</div>
-<div id="load-the-tidyverse-datasets-well-be-using-some-built-in-datasets-later-on-as-well" class="section level3">
-<h3>Load the tidyverse &amp; datasets (we’ll be using some built-in datasets later on as well):</h3>
-<pre class="r"><code>library(tidyverse)
-library(nycflights13)</code></pre>
-</div>
-<div id="lets-learn-the-tidyverse" class="section level3">
-<h3>Let’s learn the tidyverse!</h3>
-</div>
-<div id="tidyverse-functions-cheat-sheet" class="section level3">
-<h3>Tidyverse functions cheat sheet:</h3>
-<p>Below are reproducible examples of commonly used tidyverse functions using made-up data (below).</p>
+<div id="tidyverse-data-wrangling-functions-cheat-sheet" class="section level3">
+<h3>Tidyverse &amp; data wrangling functions cheat sheet:</h3>
+<p>Below are reproducible examples of commonly used tidyverse functions.</p>
 <p><strong>Remember:</strong> you can string together multiple functions using the pipe operator <strong>%&gt;%</strong>. R will evaluate the current function based off the the results of prior function calls.</p>
 <p>Let’s first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)</p>
 <pre class="r"><code># NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
@@ -228,25 +220,25 @@ pizza_data &lt;- tribble(
 <p><strong>gather():</strong> transforms data from wide to long format</p>
 <pre class="r"><code>tidy_pizza &lt;- pizza_data %&gt;% 
   gather('2017', '2018', '2019', key = &quot;year&quot;, value = &quot;pizzas_eaten&quot;)</code></pre>
-<p>Now let’s use our tidy data to practice some other functions.</p>
+<p>Now let’s use our tidy data to practice some further wrangling.</p>
 <p><strong>arrange():</strong> order observations as specified (default = alphabetical or ascending)</p>
 <pre class="r"><code>ordered_names &lt;- tidy_pizza %&gt;% 
   arrange(name) # for descending alphabetical order, use &quot;arrange(desc(names))&quot;
 
 ordered_num_pizzas &lt;- tidy_pizza %&gt;% 
-  arrange(pizzas_eaten) # descending order, use &quot;arrange(-pizzas_eaten)&quot;</code></pre>
-<p><strong>filter():</strong> selects observations within columns</p>
+  arrange(pizzas_eaten) # for descending order, use &quot;arrange(-pizzas_eaten)&quot;</code></pre>
+<p><strong>filter():</strong> select observations within columns</p>
 <pre class="r"><code>sam_an &lt;- tidy_pizza %&gt;% 
   filter(name == &quot;Sam&quot; | name == &quot;An&quot;) # &quot;|&quot; tells R to filter any observations that match &quot;Sam&quot; OR &quot;An&quot;</code></pre>
 <p><strong>group_by():</strong> groups observations such that data operations are performed at the level of the group</p>
-<pre class="r"><code>grouped_names &lt;- tidy_pizzas %&gt;% 
-  group_by(names) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.</code></pre>
+<pre class="r"><code>grouped_names &lt;- tidy_pizza %&gt;% 
+  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.</code></pre>
 <p><strong>mutate():</strong></p>
 <pre class="r"><code># use mutate() to coerce a variable to a different data type
 name_as_factor &lt;- tidy_pizza %&gt;% 
   mutate(name = as.factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
 
-# use mutate() to caluclate a new value using existing observations and add this new value to a new column
+# use mutate() to calculate a new value using existing observations and add this new value to a new column
 pizzas_per_month &lt;- tidy_pizza %&gt;% 
   mutate(pizzas_per_month = pizzas_eaten/12)
 
@@ -286,6 +278,49 @@ back_to_wide &lt;- tidy_pizza %&gt;%
     max_pizza = max(pizzas_eaten),
     min_pizza = min(pizzas_eaten) # and add as many as you want to calculate!
   )</code></pre>
+</div>
+</div>
+<div id="now-lets-learn-the-tidyverse" class="section level2">
+<h2><strong>Now let’s learn the tidyverse!</strong></h2>
+<div id="in-addition-to-the-tidyverse-well-need-to-load-a-couple-more-packages" class="section level3">
+<h3>In addition to the tidyverse, we’ll need to load a couple more packages:</h3>
+<pre class="r"><code>library(here) # from the last R-Ladies Meetup!
+library(lubridate) # to work more easily with dates</code></pre>
+</div>
+<div id="load-the-data" class="section level3">
+<h3>Load the data:</h3>
+<p>In celebration of this year’s superbloom, we’ll be exploring phenometric data of flowering California plants from the <a href="https://www.usanpn.org/home">USA-National Phenology Network</a>.</p>
+<p>Let’s pretend we’re trying to plan a trip to the desert to see the flowering plants. We want to time our trip so that we have the greatest chance to find fully bloomed plants.</p>
+<pre class="r"><code>site_phenometrics_data &lt;- read_csv(here::here(&quot;data&quot;,&quot;site_phenometrics_data.csv&quot;))</code></pre>
+</div>
+<div id="explore-the-data" class="section level3">
+<h3>Explore the data:</h3>
+</div>
+<div id="wrangle-the-data" class="section level3">
+<h3>Wrangle the data:</h3>
+<pre class="r"><code>ca_pheno &lt;- site_phenometrics_data %&gt;%
+  filter(State == &quot;CA&quot;)</code></pre>
+<pre class="r"><code># ca_precip_17 &lt;- site_phenometrics_data %&gt;% 
+#   select(State, Mean_First_Yes_Year, Site_ID, Elevation_in_Meters, Species_Functional_Type, Common_Name, Prcp_Winter, Prcp_Spring, Prcp_Summer, Prcp_Fall) %&gt;% 
+#   rename(year = Mean_First_Yes_Year, elevation = Elevation_in_Meters, func_type = Species_Functional_Type) %&gt;% 
+#   #na_if(-9999) %&gt;% 
+#   filter(State == &quot;CA&quot;) %&gt;% 
+#   
+#   filter(year == &quot;2017&quot;) %&gt;% 
+#   filter(Species)
+#   select(State, year, Site_ID, elevation, Common_Name, Prcp_Spring, Prcp_Summer, Prcp_Fall, Prcp_Winter) %&gt;% 
+#   gather('Prcp_Spring', 'Prcp_Summer', 'Prcp_Fall', 'Prcp_Winter', key = &quot;season_precip&quot;, value = &quot;precip_in&quot;) %&gt;% 
+#   mutate(precip_na = na_if(precip_in, &quot;-9999&quot;)) %&gt;% 
+#   group_by(elevation, season_precip, Common_Name) %&gt;% 
+#   summarize(
+#     total_counts = length(Common_Name),
+#     total_precip = mean(precip_na, na.rm = TRUE)
+#   )
+# 
+# ggplot(ca_precip_17, aes(x = elevation, y = total_counts)) +
+#   geom_col(aes(fill = Common_Name)) +
+#   coord_flip() +
+#   facet_wrap(~season_precip)</code></pre>
 </div>
 </div>
 

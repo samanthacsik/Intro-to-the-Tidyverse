@@ -11,11 +11,11 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## What is the tidyverse?
+## **What is the tidyverse?**
 
 The tidyverse is a collection of R packages designed for data science that share an underlying design philosophy, grammar, and data structures. Using the tidyverse can help to streamline your data manipulation and visualisations (and make this often-daunting process actually enjoyable). [Read more about it here!](https://www.tidyverse.org/) 
 
-## What packages are in the tidyverse?
+## **What packages are in the tidyverse?**
 
 | package | usage | primary functions 
 |-----------|-----------------------------------------|---------------------------------------------------------| 
@@ -28,45 +28,27 @@ The tidyverse is a collection of R packages designed for data science that share
 | [stringr](https://stringr.tidyverse.org/) | facilitates work with strings | str_detect, str_count, str_subset(), str_locate(), str_extract(), str_match(), str_replace(), str_split()
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
 
-### Don't have the tidyverse yet?
-#### Install using the following code:
+## **Don't have the tidyverse yet?**
+### Install using the following code:
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
 ```
 
-#### Let's also install the "nycflights13" dataset to practice wrangling and plotting data: 
-
-```{r, eval = FALSE}
-install.packages("nycflights13")
-```
-
-### Load the tidyverse & datasets (we'll be using some built-in datasets later on as well):
+### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
-library(nycflights13)
 ```
 
-### Let's learn the tidyverse!
+### Tidyverse & data wrangling functions cheat sheet:
 
-
-
-
-
-
-
-
-
-
-### Tidyverse functions cheat sheet:
-
-Below are reproducible examples of commonly used tidyverse functions using made-up data (below). 
+Below are reproducible examples of commonly used tidyverse functions.
 
 **Remember:** you can string together multiple functions using the pipe operator **%>%**. R will evaluate the current function based off the the results of prior function calls.
 
 Let's first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)
-```{r, eval = FALSE}
+```{r}
 # NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
 pizza_data <- tribble(
   ~name,    ~'2017',   ~'2018',   ~'2019',
@@ -81,41 +63,41 @@ pizza_data <- tribble(
 We'll first want to transform 'pizza_data' into tidy (long) format:
 
 **gather():** transforms data from wide to long format
-```{r, eval = FALSE}
+```{r}
 tidy_pizza <- pizza_data %>% 
   gather('2017', '2018', '2019', key = "year", value = "pizzas_eaten")
 ```
 
-Now let's use our tidy data to practice some other functions.
+Now let's use our tidy data to practice some further wrangling.
 
 **arrange():** order observations as specified (default = alphabetical or ascending)
-```{r, eval = FALSE}
+```{r}
 ordered_names <- tidy_pizza %>% 
   arrange(name) # for descending alphabetical order, use "arrange(desc(names))"
 
 ordered_num_pizzas <- tidy_pizza %>% 
-  arrange(pizzas_eaten) # descending order, use "arrange(-pizzas_eaten)"
+  arrange(pizzas_eaten) # for descending order, use "arrange(-pizzas_eaten)"
 ```
 
-**filter():** selects observations within columns
-```{r, eval = FALSE}
+**filter():** select observations within columns
+```{r}
 sam_an <- tidy_pizza %>% 
   filter(name == "Sam" | name == "An") # "|" tells R to filter any observations that match "Sam" OR "An"
 ```
 
 **group_by():** groups observations such that data operations are performed at the level of the group
-```{r, eval = FALSE}
-grouped_names <- tidy_pizzas %>% 
-  group_by(names) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
+```{r}
+grouped_names <- tidy_pizza %>% 
+  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
 ```
 
 **mutate():** 
-```{r, eval = FALSE}
+```{r}
 # use mutate() to coerce a variable to a different data type
 name_as_factor <- tidy_pizza %>% 
   mutate(name = as.factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
 
-# use mutate() to caluclate a new value using existing observations and add this new value to a new column
+# use mutate() to calculate a new value using existing observations and add this new value to a new column
 pizzas_per_month <- tidy_pizza %>% 
   mutate(pizzas_per_month = pizzas_eaten/12)
 
@@ -137,32 +119,32 @@ binary <- tidy_pizza %>%
 ```
 
 **pull():** pulls out a single variable from a df and saves it as a vector
-```{r, eval = FALSE}
+```{r}
 pizza_eaten_vec <- tidy_pizza %>% 
   pull(pizzas_eaten)
 ```
 
 **rename():** rename a column
-```{r, eval = FALSE}
+```{r}
 renamed_pizzas <- tidy_pizza %>% 
   rename(total_pizzas = pizzas_eaten)
 ```
 
 **select():** select columns to retain and specify their order
-```{r, eval = FALSE}
+```{r}
 names_pizzas <- tidy_pizza %>% 
   select(name, pizzas_eaten)
 ```
 
 **spread():** transform data from long to wide format
-```{r, eval = FALSE}
+```{r}
 # let's convert our 'tidy_data' back to wide format using spread()
 back_to_wide <- tidy_pizza %>% 
   spread('year', 'pizzas_eaten')
 ```
 
 **summarize():** calculate summary statistics
-```{r, eval = FALSE}
+```{r}
 pizza_summary <- tidy_pizza %>% 
   group_by(name) %>% 
   summarize(
@@ -170,4 +152,48 @@ pizza_summary <- tidy_pizza %>%
     max_pizza = max(pizzas_eaten),
     min_pizza = min(pizzas_eaten) # and add as many as you want to calculate!
   )
+```
+
+## **Now let's learn the tidyverse!**
+
+### In addition to the tidyverse, we'll need to load a couple more packages:
+
+```{r, message = FALSE, warning = FALSE}
+library(here) # from the last R-Ladies Meetup!
+library(lubridate) # to work more easily with dates
+```
+
+### Load the data: 
+
+In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA-National Phenology Network](https://www.usanpn.org/home).
+
+Let's pretend we're trying to plan a trip to the desert to see the flowering plants. We want to time our trip so that we have the greatest chance to find fully bloomed plants. 
+
+```{r, message = FALSE, warning = TRUE}
+site_phenometrics_data <- read_csv(here::here("data","site_phenometrics_data.csv"))
+```
+
+### Explore the data: 
+
+```{r, eval = FALSE}
+head(site_phenometrics_data) # view first 10 rows of data
+tail(site_phenometrics_data) # view last 10 rows of data
+str(site_phenometrics_data) # view data structure of df
+```
+
+### Wrangle the data:
+
+(a) select relevant columns
+(b) filter for only California data
+(c) rename long-winded variable names
+(d) remove missing values with NA
+
+```{r}
+ca_pheno <- site_phenometrics_data %>%
+  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Mean_First_Yes_Year, Mean_First_Yes_DOY) %>% 
+  filter(State == "CA")  %>% 
+  rename(pheno = Phenophase_Description, 
+         year = Mean_First_Yes_Year, 
+         day = Mean_First_Yes_DOY) %>% 
+  na_if(-9999)
 ```
