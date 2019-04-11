@@ -249,10 +249,13 @@ remove_NA <- unite_columns %>%
 
 #### f. set the levels for a character vector
 
-Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Pheno` column to reflect that for downstream plotting. To do this, we use `dplyr::mutate()` and `forcats::fct_relevel()`.
+Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Month` and `Pheno` columns to reflect that for downstream plotting. To do this, we use `dplyr::mutate()` and `forcats::fct_relevel()`.
 
 ```{r}
-relevel <- remove_NA %>% 
+relevel_month <- remove_NA %>% 
+  mutate(Month = fct_relevel(Month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))
+
+relevel_pheno <- relevel_month %>% 
   mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
 ```
 
@@ -267,43 +270,14 @@ ca_pheno <- pheno_data %>%
   rename(Pheno = Phenophase_Description) %>%
   unite("Genus_Species", Genus, Species) %>% 
   drop_na(Year, Month) %>% 
-  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
+  mutate(
+    Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")),
+    Month = fct_relevel(Month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))
 ```
 
 ### Plot:
 
-With this data set, we're ready to subset for desert species we're interested in. Let's say we're especially interested in Joshua trees (*Yucca brevifolia*).
-
-```{r}
-jt_sn <- remove_NA %>% 
-  filter(Genus_Species == "Yucca_brevifolia")
-
-jt_cn <- remove_NA %>% 
-  filter(Common_Name == "Joshua tree")
-```
-
-Look at the `jt_cn` or `jt_sn` data frame. Since we want to time our trip to coincide with the highest occurrence of flowering Joshua trees, we can summarize the counts of each occurrence.
-
-```{r}
-jt_summarize <- jt_sn %>% 
-  group_by(Month, Pheno) %>% 
-  summarize(sum = n())
-
-jt_tally <- jt_sn %>% 
-  group_by(Month, Pheno) %>% 
-  tally()
-```
-
-Now, we can make a basic plot in `ggplot2` that puts month on the x-axis and count of each phenophase on the y-axis.
-
-```{r}
-ggplot(relevel, aes(x = Month, 
-                       y = n, 
-                       fill = Pheno)) +
-  geom_col(position = "dodge")
-```
-
-We love **joshua trees** (*Yucca brevifolia*) and **creosote bushes** (*Larrea tridentata*) and are most interested in when these plants are blooming. Let's first isolate data for each of these species by
+With this data set, we're ready to subset for desert species we're interested in. We love **joshua trees** (*Yucca brevifolia*) and **creosote bushes** (*Larrea tridentata*) and are most interested in when these plants are blooming. Let's first isolate data for each of these species by
 
 a. filtering for only the species of interest  
 b. finding the total counts for these species for each month throughout the year
@@ -325,14 +299,16 @@ joshua_tree_plot
 # data for just creosote bush
 creosote_bush <- ca_pheno %>% 
   filter(Common_Name == "creosote bush") %>% 
-  group_by(month, pheno) %>% 
+  group_by(Month, Pheno) %>% 
   summarize( 
-    total_counts = length(pheno) # same as tally!
+    total_counts = length(Pheno) # same as tally!
   )
 
 # column plot of creosote bushes
-creosote_plot <- ggplot(creosote_bush, aes(x = month, y = total_counts, fill = pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
+creosote_plot <- ggplot(creosote_bush, aes(x = Month, y = total_counts, fill = Pheno)) +
   geom_col(position = "dodge") 
+
+creosote_plot
 ```
 
 ```{r}
