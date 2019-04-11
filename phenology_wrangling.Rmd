@@ -26,6 +26,8 @@ site_phenometrics_data$origin <- as.Date(paste0(site_phenometrics_data$Mean_Firs
 
 site_phenometrics_data$newdate <- as.Date(site_phenometrics_data$Mean_First_Yes_DOY, origin = site_phenometrics_data$origin, tz = "UTC")
 
+# the stack overflow tip page: https://stackoverflow.com/questions/46313666/how-to-convert-day-of-year-and-year-to-a-standard-date-format
+
 #### add year and month columns ####
 final_df <- site_phenometrics_data %>% 
   mutate(Year = year(newdate),
@@ -145,4 +147,13 @@ ggplot(combined, aes(x = month,
   geom_point() +
   geom_line()
 ```
+
+```{r multiple plant species}
+desert_flowers <- final_df %>% 
+  unite("Genus_Species", Genus, Species) %>% 
+  filter(Genus_Species == "Yucca_brevifolia" |
+           Genus_Species == "Larrea_tridentata" |
+           Genus_Species == "Yucca_schidigera")
+```
+
 
