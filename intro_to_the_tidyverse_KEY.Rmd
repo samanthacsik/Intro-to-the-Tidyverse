@@ -27,6 +27,7 @@ The tidyverse is a collection of R packages designed for data science that share
 | [tibble](https://tibble.tidyverse.org/) | create tibbles (modernized data frames) | as_tibble(), tibble(), tribble()
 | [stringr](https://stringr.tidyverse.org/) | facilitates work with strings | str_detect, str_count, str_subset(), str_locate(), str_extract(), str_match(), str_replace(), str_split()
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
+| [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
 
 ## **Don't have the tidyverse yet?**
 ### Install using the following code:
