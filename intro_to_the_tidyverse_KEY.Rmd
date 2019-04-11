@@ -207,7 +207,7 @@ f. set the levels for a character vector.
 This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
 
 ```{r}
-ca_pheno <- pheno_data %>% 
+ca_obs <- pheno_data %>% 
   filter(State == "CA")
 ```
 
@@ -216,7 +216,7 @@ ca_pheno <- pheno_data %>%
 This is a bit more manageable (`r nrow(phenometrics_data)` rows as opposed to `r nrow(ca_pheno)` rows) but there are still a lot of columns that we don't necessarily need. Let's select the columns we're interested in.
 
 ```{r}
-select_columns <- ca_pheno %>% 
+select_columns <- ca_obs %>% 
   select(1:4, Genus, Species, Common_Name, Phenophase_Description, Year, Month)
 ```
 
@@ -249,17 +249,19 @@ remove_NA <- unite_columns %>%
 
 #### f. set the levels for a character vector
 
-Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Pheno` column to reflect that for downstream plotting. To do this, we use `mutate()` and from `forcats` `fct_relevel()`.
+Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Pheno` column to reflect that for downstream plotting. To do this, we use `dplyr::mutate()` and `forcats::fct_relevel()`.
 
 ```{r}
 relevel <- remove_NA %>% 
   mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
 ```
 
+Like `group_by`, this doesn't change the structure of the data frame. It's a way of telling R, "There's an order to the objects in this character vector that I want you to remember."
+
 We split each wrangling step up into a separate data frame, but you could have done all these commands together in one chunk. 
 
 ```{r}
-ca_pheno_all <- pheno_data %>% 
+ca_pheno <- pheno_data %>% 
   filter(State == "CA") %>%
   select(1:4, Genus, Species, Common_Name, Phenophase_Description, Year, Month) %>% 
   rename(Pheno = Phenophase_Description) %>%
@@ -292,15 +294,6 @@ jt_tally <- jt_sn %>%
   tally()
 ```
 
-The last thing we need to do is set the levels for variables in the `pheno` column. We can do this with `mutate()` and `fct_relevel` in the `forcats` package.
-
-```{r}
-relevel <- jt_tally %>% 
-  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers")))
-```
-
-Like `group_by`, this doesn't change the structure of the data frame. It's a way of telling R, "There's an order to the objects in this character vector that I want you to remember."
-
 Now, we can make a basic plot in `ggplot2` that puts month on the x-axis and count of each phenophase on the y-axis.
 
 ```{r}
@@ -310,22 +303,24 @@ ggplot(relevel, aes(x = Month,
   geom_col(position = "dodge")
 ```
 
-We love **joshua trees** and **creosote bushes** and are most interested in when these plants are blooming. Let's fist isolate data for each of these species by
+We love **joshua trees** (*Yucca brevifolia*) and **creosote bushes** (*Larrea tridentata*) and are most interested in when these plants are blooming. Let's first isolate data for each of these species by
 
-(a) filtering for only the species of interest
-(b) finding the total counts for these species for each month throughout the year
+a. filtering for only the species of interest  
+b. finding the total counts for these species for each month throughout the year
 
 ```{r, message = FALSE}
 
 # data for just joshua trees
 joshua_tree <- ca_pheno %>% 
   filter(Genus_Species == "Yucca_brevifolia") %>% 
-  group_by(month, pheno) %>% 
+  group_by(Month, Pheno) %>% 
   tally()
 
 # column plot of joshua trees
-joshua_tree_plot <- ggplot(joshua_tree, aes(x = month, y = n, fill = pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
+joshua_tree_plot <- ggplot(joshua_tree, aes(x = Month, y = n, fill = Pheno, fct_relevel("Flowers or flower buds", "Open flowers", "Pollen release (flowers)"))) +
   geom_col(position = "dodge") # "dodge" creates separate columns for each pheno, rather than a stacked column
+
+joshua_tree_plot
 
 # data for just creosote bush
 creosote_bush <- ca_pheno %>% 
