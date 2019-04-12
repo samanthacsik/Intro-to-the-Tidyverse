@@ -460,7 +460,7 @@ joshua_tree &lt;- ca_pheno %&gt;%
   tally()
 
 # column plot of joshua trees
-joshua_tree_plot &lt;- ggplot(joshua_tree, aes(x = Month, y = n, fill = Pheno, fct_relevel(&quot;Flowers or flower buds&quot;, &quot;Open flowers&quot;, &quot;Pollen release (flowers)&quot;))) +
+joshua_tree_plot &lt;- ggplot(joshua_tree, aes(x = Month, y = n, fill = Pheno)) +
   geom_col(position = &quot;dodge&quot;) + # &quot;dodge&quot; creates separate columns for each pheno, rather than a stacked column
   labs(y = &quot;Total counts&quot;,
        title = &quot;Joshua tree phenology&quot;,
