@@ -380,7 +380,7 @@ relevel_pheno &lt;- relevel_month %&gt;%
          Month = fct_relevel(Month, month.name)) </code></pre>
 <p>With this data set, we’re ready to explore a subset of the desert species we’re most interested in. We love <strong>Joshua trees</strong> (<em>Yucca brevifolia</em>), <strong>creosote bushes</strong> (<em>Larrea tridentata</em>), and <strong>Mojave yucca</strong> (<em>Yucca schidigera</em>) and want to know when these plants are blooming. Let’s first isolate data for these species by:</p>
 <ol style="list-style-type: lower-alpha">
-<li>filtering for only Joshua tree, creosote bush, Mojave yucca</li>
+<li>filtering for only Joshua tree, creosote bush, and Mojave yucca</li>
 <li>grouping observations by month, name, and phenophase</li>
 <li>finding the total counts by month, name, and phenophase</li>
 </ol>
@@ -398,6 +398,7 @@ relevel_pheno &lt;- relevel_month %&gt;%
 <li>create a different panel for each plant species</li>
 <li>make it pretty</li>
 </ol>
+<p><strong>Note:</strong> Only the first 3 lines of the following code are necessary to make the plot. Everything else modify the appearance and make it a bit more presentable.</p>
 <pre class="r"><code>fav_plants_plot &lt;- ggplot(fav_spp, aes(x = Month, y = n, fill = Pheno)) + # fill = counts of each phenophase
   geom_col(position = &quot;dodge&quot;) + # separate columns for each phenophase (instead of stacked)
   facet_wrap(~Common_Name) + # create separate panels for each species
