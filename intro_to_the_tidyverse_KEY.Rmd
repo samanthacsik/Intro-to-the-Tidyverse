@@ -288,7 +288,7 @@ c. finding the total counts by month, name, and phenophase
 
 ```{r}
 fav_spp <- ca_pheno_simple %>% 
-  filter(Common_Name == "Joshua tree" | Common_Name == "creosote bush" | Common_Name == "Mojave yucca") %>% 
+  filter(Common_Name == "Joshua tree" | Common_Name == "creosote bush" | Common_Name == "Mojave yucca") %>%
   group_by(Month, Common_Name, Pheno) %>% 
   tally() # you could also use summarize() here!
 ```

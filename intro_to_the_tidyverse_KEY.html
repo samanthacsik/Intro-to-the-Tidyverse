@@ -385,7 +385,7 @@ relevel_pheno &lt;- relevel_month %&gt;%
 <li>finding the total counts by month, name, and phenophase</li>
 </ol>
 <pre class="r"><code>fav_spp &lt;- ca_pheno_simple %&gt;% 
-  filter(Common_Name == &quot;Joshua tree&quot; | Common_Name == &quot;creosote bush&quot; | Common_Name == &quot;Mojave yucca&quot;) %&gt;% 
+  filter(Common_Name == &quot;Joshua tree&quot; | Common_Name == &quot;creosote bush&quot; | Common_Name == &quot;Mojave yucca&quot;) %&gt;%
   group_by(Month, Common_Name, Pheno) %&gt;% 
   tally() # you could also use summarize() here!</code></pre>
 </div>
