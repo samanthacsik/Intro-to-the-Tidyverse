@@ -221,7 +221,7 @@ This is a bit more manageable (`r nrow(pheno_data)` rows as opposed to `r nrow(c
 
 ```{r}
 select_columns <- ca_obs %>% 
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month)
+  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month) # you can supply a range of columns, or specify them individually
 ```
 
 #### c. rename columns

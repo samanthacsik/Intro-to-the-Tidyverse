@@ -337,7 +337,7 @@ colnames(pheno_data) # view the columns of df</code></pre>
 <h4>b. select the columns we want</h4>
 <p>This is a bit more manageable (4291 rows as opposed to 2801 rows) but there are still a lot of columns that we don’t need in order to visualize our data. Let’s select only the columns we’re interested in.</p>
 <pre class="r"><code>select_columns &lt;- ca_obs %&gt;% 
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month)</code></pre>
+  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month) # you can supply a range of columns, or specify them individually</code></pre>
 </div>
 <div id="c.-rename-columns" class="section level4">
 <h4>c. rename columns</h4>
