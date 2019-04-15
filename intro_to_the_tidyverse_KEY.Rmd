@@ -92,7 +92,7 @@ grouped_names <- tidy_pizza %>%
   group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
 ```
 
-**mutate():** 
+**mutate():**
 ```{r}
 # use mutate() to coerce a variable to a different data type
 name_as_factor <- tidy_pizza %>% 
@@ -301,7 +301,7 @@ a. create a column graph showing the total counts of plants by phenophase and by
 b. create a different panel for each plant species
 c. make it pretty
 
-**Note:** Only the first 3 lines of the following code are necessary to make the plot. Everything else modify the appearance and make it a bit more presentable.
+**Note:** Only the first 3 lines of the following code are necessary to make the plot. Everything else simply modifies the appearance and make it a bit more presentable. There are *tons* of ways to customize plots -- we explore only a few options below.
 
 ```{r, fig.align = 'center', fig.width = 15, fig.height = 10}
 fav_plants_plot <- ggplot(fav_spp, aes(x = Month, y = n, fill = Pheno)) + # fill = counts of each phenophase

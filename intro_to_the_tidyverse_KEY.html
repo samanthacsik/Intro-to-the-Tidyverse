@@ -398,7 +398,7 @@ relevel_pheno &lt;- relevel_month %&gt;%
 <li>create a different panel for each plant species</li>
 <li>make it pretty</li>
 </ol>
-<p><strong>Note:</strong> Only the first 3 lines of the following code are necessary to make the plot. Everything else modify the appearance and make it a bit more presentable.</p>
+<p><strong>Note:</strong> Only the first 3 lines of the following code are necessary to make the plot. Everything else simply modifies the appearance and make it a bit more presentable. There are <em>tons</em> of ways to customize plots – we explore only a few options below.</p>
 <pre class="r"><code>fav_plants_plot &lt;- ggplot(fav_spp, aes(x = Month, y = n, fill = Pheno)) + # fill = counts of each phenophase
   geom_col(position = &quot;dodge&quot;) + # separate columns for each phenophase (instead of stacked)
   facet_wrap(~Common_Name) + # create separate panels for each species
