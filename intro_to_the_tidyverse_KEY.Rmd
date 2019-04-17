@@ -92,7 +92,7 @@ grouped_names <- tidy_pizza %>%
   group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
 ```
 
-**mutate():** 
+**mutate():**
 ```{r}
 # use mutate() to coerce a variable to a different data type
 name_as_factor <- tidy_pizza %>% 
@@ -282,7 +282,7 @@ ca_pheno_simple <- pheno_data %>%
 
 With this data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
 
-a. filtering for only Joshua tree, creosote bush, Mojave yucca 
+a. filtering for only Joshua tree, creosote bush, and Mojave yucca 
 b. grouping observations by month, name, and phenophase
 c. finding the total counts by month, name, and phenophase
 
@@ -300,6 +300,8 @@ Now that we have our data tallied and in tidy format, we're ready to make a plot
 a. create a column graph showing the total counts of plants by phenophase and by month
 b. create a different panel for each plant species
 c. make it pretty
+
+**Note:** Only the first 3 lines of the following code are necessary to make the plot. Everything else simply modifies the appearance and make it a bit more presentable. There are *tons* of ways to customize plots -- we explore only a few options below.
 
 ```{r, fig.align = 'center', fig.width = 15, fig.height = 10}
 fav_plants_plot <- ggplot(fav_spp, aes(x = Month, y = n, fill = Pheno)) + # fill = counts of each phenophase
