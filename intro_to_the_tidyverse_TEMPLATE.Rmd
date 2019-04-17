@@ -203,12 +203,12 @@ We should first familiarize ourselves with the data.
 
 This dataset is *huge*--we'll want to wrangle it so that it only includes the information that we're interested in. We will:
 
-a. filter for California observations  
-b. select relevant columns of data 
-c. rename columns  
-d. unite multiple columns  
-e. remove any NA values  
-f. set the levels for a character vector  
+a.   
+b. 
+c.   
+d.   
+e.  
+f. 
 
 To demonstrate these individual steps, we'll perform each function separately. Notice that we perform subsequent function calls on the data frame generated from the prior step. At the end, we'll show you how to combine all steps into a single, succint code chunk.
 
@@ -299,9 +299,9 @@ We split each wrangling step up into a separate data frame, but you could have l
 
 With this data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
 
-a. filtering for only Joshua tree, creosote bush, Mojave yucca 
-b. grouping observations by month, name, and phenophase
-c. finding the total counts by month, name, and phenophase
+a. 
+b. 
+c. 
 
 ```{r}
 
@@ -315,9 +315,9 @@ c. finding the total counts by month, name, and phenophase
 
 Now that we have our data tallied and in tidy format, we're ready to make a plot! We want to:
 
-a. create a column graph showing the total counts of plants by phenophase and by month
-b. create a different panel for each plant species
-c. make it pretty
+a. 
+b. 
+c. 
 
 ```{r, fig.align = 'center', fig.width = 15, fig.height = 10}
 
