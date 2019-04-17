@@ -52,7 +52,7 @@ Let's first create some completely hypothetical data about the number of pizzas 
 ```{r}
 # NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
 pizza_data <- tribble(
-  ~name,    ~'2017',   ~'2018',   ~'2019',
+  ~name,    ~year_2017,   ~year_2018,   ~year_2019,
   "Sam",       25,        20,        16,
   "An",        20,        15,        11,
   "Allison",   18,        17,        10,
@@ -66,7 +66,7 @@ We'll first want to transform 'pizza_data' into tidy (long) format:
 **gather():** transforms data from wide to long format
 ```{r}
 tidy_pizza <- pizza_data %>% 
-  gather('2017', '2018', '2019', key = "year", value = "pizzas_eaten")
+  gather(year_2017, year_2018, year_2019, key = "year", value = "pizzas_eaten")
 ```
 
 Now let's use our tidy data to practice some further wrangling.
@@ -84,6 +84,9 @@ ordered_num_pizzas <- tidy_pizza %>%
 ```{r}
 sam_an <- tidy_pizza %>% 
   filter(name == "Sam" | name == "An") # "|" tells R to filter any observations that match "Sam" OR "An"
+
+sam_an_alt <- tidy_pizza %>% 
+  filter(name %in% c("Sam", "An")) # another way of filtering
 ```
 
 **group_by():** groups observations such that data operations are performed at the level of the group
