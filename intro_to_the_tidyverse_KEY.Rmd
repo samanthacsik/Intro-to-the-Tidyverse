@@ -69,7 +69,7 @@ We'll first want to transform 'pizza_data' into tidy (long) format:
 **gather():** transforms data from wide to long format
 ```{r}
 tidy_pizza <- pizza_data %>% 
-  gather(`2017`, `2018`, `2019`, key = "year", value = "pizzas_eaten")
+  gather(`2017`, `2018`, `2019`, key = year, value = pizzas_eaten)
 ```
 
 Now let's use our tidy data to practice some further wrangling.
@@ -146,8 +146,8 @@ names_pizzas <- tidy_pizza %>%
 **spread():** transform data from long to wide format
 ```{r}
 # let's convert our 'tidy_pizza' data back to wide format using spread()
-back_to_wide <- tidy_pizza %>% 
-  spread(year, pizzas_eaten)
+back_to_wide2 <- tidy_pizza %>% 
+  spread(key = year, value = pizzas_eaten)
 ```
 
 **summarize():** calculate summary statistics
