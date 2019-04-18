@@ -181,7 +181,11 @@ library(janitor) # some neat tools for cleaning messy data
 In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA -- National Phenology Network](https://www.usanpn.org/home).
 
 ```{r, message = FALSE, warning = TRUE}
+# use this to load your data if you forked our repository from GitHub
 pheno_data <- read_csv(here::here("data","phenometrics_data.csv"))
+
+# use this to load yoru data if you downloaded materials from Google Drive and created your own project
+pheno_data <- read_csv("data/phenometrics_data.csv")
 ```
 
 Let's pretend we're trying to plan a getaway to the Joshua Tree National Park and want to time our trip so that we have the greatest chance of seeing fully bloomed plants. 
