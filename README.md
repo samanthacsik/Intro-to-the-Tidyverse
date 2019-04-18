@@ -15,7 +15,7 @@ We're interested in blooming desert plants:
 
 |     Common name     |      Scientific name      |                     Flowers                        |
 |---------------------|---------------------------|----------------------------------------------------| 
-|     Joshua tree     |     *Yucca brevifolia*    |<img src = "figures/joshua_tree.jpg" width = "450" align = "center"/>  |
-|    Creosote bush    |    *Larrea tridentata*    |<img src = "figures/creosote_bush.jpeg" width = "450" align = "center"/>|
-|     Mojave yucca    |     *Yucca schidigera*    |<img src = "figures/mojave_yucca.jpg" width = "450" align = "center"/> |
+|     Joshua tree     |     *Yucca brevifolia*    |<img src = "media/joshua_tree.jpg" width = "450" align = "center"/>  |
+|    Creosote bush    |    *Larrea tridentata*    |<img src = "media/creosote_bush.jpeg" width = "450" align = "center"/>|
+|     Mojave yucca    |     *Yucca schidigera*    |<img src = "media/mojave_yucca.jpg" width = "450" align = "center"/> |
 
