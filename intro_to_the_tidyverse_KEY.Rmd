@@ -29,17 +29,19 @@ The tidyverse is a collection of R packages designed for data science that share
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
 | [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
 
-## **Don't have the tidyverse yet?**
+## **Don't have the tidyverse/janitor yet?**
 ### Install using the following code:
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
+install.packages("janitor")
 ```
 
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
+library(janitor)
 ```
 
 ## **Data wrangling cheat sheet:**
@@ -52,7 +54,7 @@ Let's first create some completely hypothetical data about the number of pizzas 
 ```{r}
 # NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
 pizza_data <- tribble(
-  ~name,    ~year_2017,   ~year_2018,   ~year_2019,
+  ~name,    ~"year 2017",   ~"year 2018",   ~"year 2019",
   "Sam",       25,        20,        16,
   "An",        20,        15,        11,
   "Allison",   18,        17,        10,
@@ -61,11 +63,17 @@ pizza_data <- tribble(
   )
 ```
 
-We'll first want to transform 'pizza_data' into tidy (long) format:
+We'll first want to make the column names more user-friendly by replacing spaces with underscores. We do this with `janitor::clean_names()`. 
+```{r}
+clean_columns <- pizza_data %>% 
+  clean_names(case = c("snake"))
+```
+
+Then, we'll want to transform 'pizza_data' into tidy (long) format:
 
 **gather():** transforms data from wide to long format
 ```{r}
-tidy_pizza <- pizza_data %>% 
+tidy_pizza <- clean_columns %>% 
   gather(year_2017, year_2018, year_2019, key = "year", value = "pizzas_eaten")
 ```
 
