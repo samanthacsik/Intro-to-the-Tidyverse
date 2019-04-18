@@ -1,6 +1,6 @@
 # Intro-to-the-Tidyverse
 R-Ladies Meetup May 2019  
-Leaders: Sam Csik, An Bui
+Leaders: An Bui, Sam Csik
 
 ## Outline
 1. What is the tidyverse?
