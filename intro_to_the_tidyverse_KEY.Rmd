@@ -1,6 +1,6 @@
 ---
 title: 'Intro to the Tidyverse: R-Ladies SB May 2019'
-author: "Sam Csik & An Bui"
+author: "An Bui & Sam Csik"
 date: "15 May 2019"
 output: html_document
 editor_options: 
@@ -49,12 +49,13 @@ Below are reproducible examples of commonly used tidyverse functions.
 **Remember:** you can string together multiple functions using the pipe operator `%>%`. R will evaluate the current function based off the the results of prior function calls.
 
 Let's first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)
+
 ```{r}
 # NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
 pizza_data <- tribble(
-  ~name,    ~year_2017,   ~year_2018,   ~year_2019,
-  "Sam",       25,        20,        16,
-  "An",        20,        15,        11,
+  ~name,    ~`2017`,   ~`2018`,   ~`2019`, # R doesnt' love vars named as numbers; wrap them in backquotes! 
+  "Sam",       25,        20,        16,   # or avoid the problem by beginning var names with characters 
+  "An",        20,        15,        11,   # (e.g. "year_2017")
   "Allison",   18,        17,        10,
   "Julie",     19,        10,        14,
   "Jamie",     21,        13,        14
@@ -66,7 +67,7 @@ We'll first want to transform 'pizza_data' into tidy (long) format:
 **gather():** transforms data from wide to long format
 ```{r}
 tidy_pizza <- pizza_data %>% 
-  gather(year_2017, year_2018, year_2019, key = "year", value = "pizzas_eaten")
+  gather(`2017`, `2018`, `2019`, key = "year", value = "pizzas_eaten")
 ```
 
 Now let's use our tidy data to practice some further wrangling.
@@ -144,7 +145,7 @@ names_pizzas <- tidy_pizza %>%
 ```{r}
 # let's convert our 'tidy_pizza' data back to wide format using spread()
 back_to_wide <- tidy_pizza %>% 
-  spread('year', 'pizzas_eaten')
+  spread(year, pizzas_eaten)
 ```
 
 **summarize():** calculate summary statistics
@@ -172,6 +173,7 @@ tallied_pizza <- tidy_pizza %>%
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse) # if you haven't loaded it already
 library(here) # from the last R-Ladies Meetup!
+library(janitor) # some neat tools for cleaning messy data
 ```
 
 ### Load the data: 
@@ -247,7 +249,7 @@ unite_columns <- rename_columns %>%
 
 #### e. remove any NA values
 
-If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `Year` and `Month` entries. We can take out any rows with `NA` in either of these columns.
+If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `Year` and `Month` entries. We can take out any rows with `NA` in either of these columns. **Be aware** that this drops **all** rows that contain 'NA' in either `Year` or `Month`.
 
 ```{r}
 remove_NA <- unite_columns %>% 
@@ -283,7 +285,7 @@ ca_pheno_simple <- pheno_data %>%
          Month = fct_relevel(Month, month.name)) 
 ```
 
-With this data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
+With this simplified and cleaned data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
 
 a. filtering for only Joshua tree, creosote bush, and Mojave yucca 
 b. grouping observations by month, name, and phenophase

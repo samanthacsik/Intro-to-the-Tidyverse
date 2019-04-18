@@ -1,7 +1,7 @@
 ---
 title: '(user template) Intro to the Tidyverse: R-Ladies SB May 2019'
-author: "Sam Csik & An Bui"
-date: "4/17/2019"
+author: "Your Name Here"
+date: "15 May 2019"
 output: html_document
 ---
 
@@ -48,12 +48,14 @@ Below are reproducible examples of commonly used tidyverse functions.
 
 Let's first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)
 ```{r}
-
-
-
-
-
-
+pizza_data <- tribble(
+  ~name,    ~`2017`,   ~`2018`,   ~`2019`,  
+  "Sam",       25,        20,        16,  
+  "An",        20,        15,        11,   
+  "Allison",   18,        17,        10,
+  "Julie",     19,        10,        14,
+  "Jamie",     21,        13,        14
+  )
 ```
 
 We'll first want to transform 'pizza_data' into tidy (long) format:
@@ -260,7 +262,7 @@ We can also combine the `Genus` and `Species` into a single column.
 
 #### e. remove any NA values
 
-If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `Year` and `Month` entries. We can take out any rows with `NA` in either of these columns.
+If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `Year` and `Month` entries. We can take out any rows with `NA` in either of these columns. **Be aware** that this drops **all** rows that contain 'NA' in either `Year` or `Month`.
 
 ```{r}
 
@@ -297,7 +299,7 @@ We split each wrangling step up into a separate data frame, but you could have l
 
 ```
 
-With this data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
+With this simplified and cleaned data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
 
 a. 
 b. 
