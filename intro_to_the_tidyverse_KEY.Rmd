@@ -186,7 +186,7 @@ In celebration of this year's superbloom, we'll be exploring phenometric data of
 # use this to load your data if you forked our repository from GitHub
 pheno_data <- read_csv(here::here("data","phenometrics_data.csv"))
 
-# use this to load yoru data if you downloaded materials from Google Drive and created your own project
+# use this to load your data if you downloaded materials from Google Drive and created your own project
 pheno_data <- read_csv("data/phenometrics_data.csv")
 ```
 
