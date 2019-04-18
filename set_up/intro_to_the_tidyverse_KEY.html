@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Sam Csik &amp; An Bui" />
+<meta name="author" content="An Bui &amp; Sam Csik" />
 
 <meta name="date" content="2019-05-15" />
 
@@ -123,7 +123,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Intro to the Tidyverse: R-Ladies SB May 2019</h1>
-<h4 class="author"><em>Sam Csik &amp; An Bui</em></h4>
+<h4 class="author"><em>An Bui &amp; Sam Csik</em></h4>
 <h4 class="date"><em>15 May 2019</em></h4>
 
 </div>
@@ -215,7 +215,7 @@ $(document).ready(function () {
 <p>Let’s first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)</p>
 <pre class="r"><code># NOTE: this data is untidy (i.e. in wide format, where each row represents three observations, not one)
 pizza_data &lt;- tribble(
-  ~name,    ~'2017',   ~'2018',   ~'2019',
+  ~name,    ~`2017`,   ~`2018`,   ~`2019`,
   &quot;Sam&quot;,       25,        20,        16,
   &quot;An&quot;,        20,        15,        11,
   &quot;Allison&quot;,   18,        17,        10,
@@ -225,7 +225,7 @@ pizza_data &lt;- tribble(
 <p>We’ll first want to transform ‘pizza_data’ into tidy (long) format:</p>
 <p><strong>gather():</strong> transforms data from wide to long format</p>
 <pre class="r"><code>tidy_pizza &lt;- pizza_data %&gt;% 
-  gather('2017', '2018', '2019', key = &quot;year&quot;, value = &quot;pizzas_eaten&quot;)</code></pre>
+  gather(`2017`, `2018`, `2019`, key = &quot;year&quot;, value = &quot;pizzas_eaten&quot;)</code></pre>
 <p>Now let’s use our tidy data to practice some further wrangling.</p>
 <p><strong>arrange():</strong> order observations as specified (default = alphabetical or ascending)</p>
 <pre class="r"><code>ordered_names &lt;- tidy_pizza %&gt;% 
@@ -235,7 +235,10 @@ ordered_num_pizzas &lt;- tidy_pizza %&gt;%
   arrange(pizzas_eaten) # for descending order, use &quot;arrange(-pizzas_eaten)&quot;</code></pre>
 <p><strong>filter():</strong> select observations within columns</p>
 <pre class="r"><code>sam_an &lt;- tidy_pizza %&gt;% 
-  filter(name == &quot;Sam&quot; | name == &quot;An&quot;) # &quot;|&quot; tells R to filter any observations that match &quot;Sam&quot; OR &quot;An&quot;</code></pre>
+  filter(name == &quot;Sam&quot; | name == &quot;An&quot;) # &quot;|&quot; tells R to filter any observations that match &quot;Sam&quot; OR &quot;An&quot;
+
+sam_an_alt &lt;- tidy_pizza %&gt;% 
+  filter(name %in% c(&quot;Sam&quot;, &quot;An&quot;)) # another way of filtering</code></pre>
 <p><strong>group_by():</strong> groups observations such that data operations are performed at the level of the group</p>
 <pre class="r"><code>grouped_names &lt;- tidy_pizza %&gt;% 
   group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.</code></pre>
@@ -294,7 +297,8 @@ back_to_wide &lt;- tidy_pizza %&gt;%
 <div id="load-the-tidyverse-and-any-additional-required-packages" class="section level3">
 <h3>Load the tidyverse and any additional required packages:</h3>
 <pre class="r"><code>library(tidyverse) # if you haven't loaded it already
-library(here) # from the last R-Ladies Meetup!</code></pre>
+library(here) # from the last R-Ladies Meetup!
+library(janitor) # some neat tools for cleaning messy data</code></pre>
 </div>
 <div id="load-the-data" class="section level3">
 <h3>Load the data:</h3>
@@ -353,7 +357,7 @@ colnames(pheno_data) # view the columns of df</code></pre>
 </div>
 <div id="e.-remove-any-na-values" class="section level4">
 <h4>e. remove any NA values</h4>
-<p>If you look at the <code>unite_columns</code> data frame, you’ll see that there are <code>NA</code> values for some of the <code>Year</code> and <code>Month</code> entries. We can take out any rows with <code>NA</code> in either of these columns.</p>
+<p>If you look at the <code>unite_columns</code> data frame, you’ll see that there are <code>NA</code> values for some of the <code>Year</code> and <code>Month</code> entries. We can take out any rows with <code>NA</code> in either of these columns. <strong>Be aware</strong> that this drops <strong>all</strong> rows that contain ‘NA’ in either <code>Year</code> or <code>Month</code>.</p>
 <pre class="r"><code>remove_NA &lt;- unite_columns %&gt;% 
   drop_na(Year, Month)</code></pre>
 </div>
@@ -378,7 +382,7 @@ relevel_pheno &lt;- relevel_month %&gt;%
   drop_na(Year, Month) %&gt;% 
   mutate(Pheno = fct_relevel(Pheno, c(&quot;Flowers or flower buds&quot;, &quot;Open flowers&quot;, &quot;Pollen release (flowers)&quot;)),
          Month = fct_relevel(Month, month.name)) </code></pre>
-<p>With this data set, we’re ready to explore a subset of the desert species we’re most interested in. We love <strong>Joshua trees</strong> (<em>Yucca brevifolia</em>), <strong>creosote bushes</strong> (<em>Larrea tridentata</em>), and <strong>Mojave yucca</strong> (<em>Yucca schidigera</em>) and want to know when these plants are blooming. Let’s first isolate data for these species by:</p>
+<p>With this simplified and cleaned data set, we’re ready to explore a subset of the desert species we’re most interested in. We love <strong>Joshua trees</strong> (<em>Yucca brevifolia</em>), <strong>creosote bushes</strong> (<em>Larrea tridentata</em>), and <strong>Mojave yucca</strong> (<em>Yucca schidigera</em>) and want to know when these plants are blooming. Let’s first isolate data for these species by:</p>
 <ol style="list-style-type: lower-alpha">
 <li>filtering for only Joshua tree, creosote bush, and Mojave yucca</li>
 <li>grouping observations by month, name, and phenophase</li>

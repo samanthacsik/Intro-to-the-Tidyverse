@@ -29,17 +29,19 @@ The tidyverse is a collection of R packages designed for data science that share
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
 | [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
 
-## **Don't have the tidyverse yet?**
+## **Don't have the tidyverse/janitor yet?**
 ### Install using the following code:
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
+install.packages("janitor")
 ```
 
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
+library(janitor)
 ```
 
 ## **Data wrangling cheat sheet:**
