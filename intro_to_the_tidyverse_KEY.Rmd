@@ -29,19 +29,17 @@ The tidyverse is a collection of R packages designed for data science that share
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
 | [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
 
-## **Don't have the tidyverse/janitor yet?**
+## **Don't have the tidyverse and/or janitor yet?**
 ### Install using the following code:
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
-install.packages("janitor")
 ```
 
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
-library(janitor)
 ```
 
 ## **Data wrangling cheat sheet:**
@@ -82,9 +80,6 @@ ordered_names <- tidy_pizza %>%
 ordered_num_pizzas <- tidy_pizza %>% 
   arrange(pizzas_eaten) # for descending order, use "arrange(-pizzas_eaten)"
 ```
-
-**clean_names():** converts all variable names to snake_case
-
 
 **filter():** select observations within columns
 ```{r}
@@ -149,7 +144,7 @@ names_pizzas <- tidy_pizza %>%
 **spread():** transform data from long to wide format
 ```{r}
 # let's convert our 'tidy_pizza' data back to wide format using spread()
-back_to_wide2 <- tidy_pizza %>% 
+back_to_wide <- tidy_pizza %>% 
   spread(key = year, value = pizzas_eaten)
 ```
 
@@ -211,31 +206,41 @@ colnames(pheno_data) # view the columns of df
 
 This dataset is *huge*--we'll want to wrangle it so that it only includes the information that we're interested in. We will:
 
-a. filter for California observations  
-b. select relevant columns of data 
-c. rename columns  
-d. unite multiple columns  
-e. remove any NA values  
-f. set the levels for a character vector  
+a. convert variable names to snake_case
+b. filter for California observations  
+c. select relevant columns of data 
+d. rename columns  
+e. unite multiple columns  
+f. remove any NA values  
+g. set the levels for a character vector  
 
 To demonstrate these individual steps, we'll perform each function separately. Notice that we perform subsequent function calls on the data frame generated from the prior step. At the end, we'll show you how to combine all steps into a single, succint code chunk.
 
-#### a. filtering for California observations
+#### a. convert variable names to snake_case using `janitor`
+
+Variable names that include spaces are a pain to work with. Each time you call a variable name, it must be wrapped in backquotes for R to recognize it. Let's convert them to snake_case to make things easier.
+
+```{r}
+pheno_snake <- pheno_data %>% 
+  janitor::clean_names()
+```
+
+#### b. filtering for California observations
 
 This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
 
 ```{r}
-ca_obs <- pheno_data %>% 
-  filter(State == "CA")
+ca_obs <- pheno_snake %>% 
+  filter(state == "CA")
 ```
 
 #### b. select the columns we want
 
-This is a bit more manageable (`r nrow(pheno_data)` rows as opposed to `r nrow(ca_obs)` rows) but there are still a lot of columns that we don't need in order to visualize our data. Let's select only the columns we're interested in.
+This is a bit more manageable (`r nrow(ca_obs)` rows as opposed to `r nrow(pheno_data)` rows) but there are still a lot of columns that we don't need in order to visualize our data. Let's select only the columns we're interested in.
 
 ```{r}
 select_columns <- ca_obs %>% 
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month) # you can supply a range of columns, or specify them individually
+  select(5:9, phenophase_description, year, month) # you can supply a range of columns, or specify them individually
 ```
 
 #### c. rename columns
@@ -244,37 +249,37 @@ To make this even more manageable, we can change column names to something easie
 
 ```{r}
 rename_columns <- select_columns %>% 
-  rename(Pheno = Phenophase_Description)
+  rename(pheno = phenophase_description)
 ```
 
 #### d. unite columns
 
-We can also combine the `Genus` and `Species` into a single column.
+We can also combine the `genus` and `species` into a single column.
 
 ```{r}
 unite_columns <- rename_columns %>% 
-  unite("Genus_Species", Genus, Species)
+  unite("genus_species", genus, species, sep = "_") # sep = "_" is the default
 ```
 
 #### e. remove any NA values
 
-If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `Year` and `Month` entries. We can take out any rows with `NA` in either of these columns. **Be aware** that this drops **all** rows that contain 'NA' in either `Year` or `Month`.
+If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `year` and `month` entries. We can take out any rows with `NA` in either of these columns. **Be aware** that this drops **all** rows that contain 'NA' in either `year` or `month`.
 
 ```{r}
 remove_NA <- unite_columns %>% 
-  drop_na(Year, Month)
+  drop_na(year, month)
 ```
 
 #### f. set the levels for a character vector
 
-Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Month` and `Pheno` columns to reflect that for downstream plotting. To do this, we use `dplyr::mutate()` and `forcats::fct_relevel()`.
+Lastly, we're going to set the levels for the `pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `month` and `pheno` columns to reflect that for downstream plotting. To do this, we use `dplyr::mutate()` and `forcats::fct_relevel()`.
 
 ```{r}
 relevel_month <- remove_NA %>% 
-  mutate(Month = fct_relevel(Month, month.name)) # month.name is a built-in vector of months (in the correct order!)
+  mutate(month = fct_relevel(month, month.name)) # month.name is a built-in vector of months (in the correct order!)
 
 relevel_pheno <- relevel_month %>% 
-  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
+  mutate(pheno = fct_relevel(pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")))
 ```
 
 Like `group_by()`, this doesn't change the structure of the data frame. It's a way of telling R, "There's an order to the objects in this character vector that I want you to remember."
@@ -285,13 +290,14 @@ We split each wrangling step up into a separate data frame, but you could have l
 
 ```{r}
 ca_pheno_simple <- pheno_data %>% 
-  filter(State == "CA") %>%
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month) %>% 
-  rename(Pheno = Phenophase_Description) %>%
-  unite("Genus_Species", Genus, Species) %>% 
-  drop_na(Year, Month) %>% 
-  mutate(Pheno = fct_relevel(Pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")),
-         Month = fct_relevel(Month, month.name)) 
+  clean_names() %>% 
+  filter(state == "CA") %>%
+  select(5:9, phenophase_description, year, month) %>% 
+  rename(pheno = phenophase_description) %>%
+  unite("genus_species", genus, species) %>% 
+  drop_na(year, month) %>% 
+  mutate(pheno = fct_relevel(pheno, c("Flowers or flower buds", "Open flowers", "Pollen release (flowers)")),
+         month = fct_relevel(month, month.name)) 
 ```
 
 With this simplified and cleaned data set, we're ready to explore a subset of the desert species we're most interested in. We love **Joshua trees** (*Yucca brevifolia*), **creosote bushes** (*Larrea tridentata*), and **Mojave yucca** (*Yucca schidigera*) and want to know when these plants are blooming. Let's first isolate data for these species by:
@@ -302,10 +308,12 @@ c. finding the total counts by month, name, and phenophase
 
 ```{r}
 fav_spp <- ca_pheno_simple %>% 
-  filter(Common_Name == "Joshua tree" | Common_Name == "creosote bush" | Common_Name == "Mojave yucca") %>%
-  group_by(Month, Common_Name, Pheno) %>% 
+  filter(common_name %in% c("Joshua tree", "creosote bush", "Mojave yucca")) %>%
+  group_by(month, common_name, pheno) %>% 
   tally() # you could also use summarize() here!
 ```
+
+**Note:** You could have also continued to pipe these steps directly into the `ca_pheno_simple` dataframe rather than creating a separate `fav_spp` dataframe.
 
 ### Plot:
 
@@ -318,9 +326,9 @@ c. make it pretty
 **Note:** Only the first 3 lines of the following code are necessary to make the plot. Everything else simply modifies the appearance and make it a bit more presentable. There are *tons* of ways to customize plots -- we explore only a few options below.
 
 ```{r, fig.align = 'center', fig.width = 15, fig.height = 10}
-fav_plants_plot <- ggplot(fav_spp, aes(x = Month, y = n, fill = Pheno)) + # fill = counts of each phenophase
+fav_plants_plot <- ggplot(fav_spp, aes(x = month, y = n, fill = pheno)) + # fill = counts of each phenophase
   geom_col(position = "dodge") + # separate columns for each phenophase (instead of stacked)
-  facet_wrap(~Common_Name) + # create separate panels for each species
+  facet_wrap(~common_name) + # create separate panels for each species
   labs(x = "Month", y = "Counts") + # change axis label names
   guides(fill = guide_legend(title = "Phenophase")) + # rename legend title
   scale_x_discrete(limits = c(month.name)) + # include all months on x-axis, even if there's no data

@@ -197,17 +197,15 @@ $(document).ready(function () {
 </tbody>
 </table>
 </div>
-<div id="dont-have-the-tidyversejanitor-yet" class="section level2">
-<h2><strong>Don’t have the tidyverse/janitor yet?</strong></h2>
+<div id="dont-have-the-tidyverse-andor-janitor-yet" class="section level2">
+<h2><strong>Don’t have the tidyverse and/or janitor yet?</strong></h2>
 <div id="install-using-the-following-code" class="section level3">
 <h3>Install using the following code:</h3>
-<pre class="r"><code>install.packages(&quot;tidyverse&quot;)
-install.packages(&quot;janitor&quot;)</code></pre>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
 </div>
 <div id="load-the-tidyverse" class="section level3">
 <h3>Load the tidyverse:</h3>
-<pre class="r"><code>library(tidyverse)
-library(janitor)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
 </div>
 </div>
 <div id="data-wrangling-cheat-sheet" class="section level2">
@@ -235,7 +233,6 @@ pizza_data &lt;- tribble(
 
 ordered_num_pizzas &lt;- tidy_pizza %&gt;% 
   arrange(pizzas_eaten) # for descending order, use &quot;arrange(-pizzas_eaten)&quot;</code></pre>
-<p><strong>clean_names():</strong> converts all variable names to snake_case</p>
 <p><strong>filter():</strong> select observations within columns</p>
 <pre class="r"><code>sam_an &lt;- tidy_pizza %&gt;% 
   filter(name == &quot;Sam&quot; | name == &quot;An&quot;) # &quot;|&quot; tells R to filter any observations that match &quot;Sam&quot; OR &quot;An&quot;
@@ -280,7 +277,7 @@ binary &lt;- tidy_pizza %&gt;%
   select(name, pizzas_eaten)</code></pre>
 <p><strong>spread():</strong> transform data from long to wide format</p>
 <pre class="r"><code># let's convert our 'tidy_pizza' data back to wide format using spread()
-back_to_wide2 &lt;- tidy_pizza %&gt;% 
+back_to_wide &lt;- tidy_pizza %&gt;% 
   spread(key = year, value = pizzas_eaten)</code></pre>
 <p><strong>summarize():</strong> calculate summary statistics</p>
 <pre class="r"><code>pizza_summary &lt;- tidy_pizza %&gt;% 
@@ -326,6 +323,7 @@ colnames(pheno_data) # view the columns of df</code></pre>
 <h3>Wrangle:</h3>
 <p>This dataset is <em>huge</em>–we’ll want to wrangle it so that it only includes the information that we’re interested in. We will:</p>
 <ol style="list-style-type: lower-alpha">
+<li>convert variable names to snake_case</li>
 <li>filter for California observations<br />
 </li>
 <li>select relevant columns of data</li>
@@ -338,57 +336,64 @@ colnames(pheno_data) # view the columns of df</code></pre>
 <li>set the levels for a character vector</li>
 </ol>
 <p>To demonstrate these individual steps, we’ll perform each function separately. Notice that we perform subsequent function calls on the data frame generated from the prior step. At the end, we’ll show you how to combine all steps into a single, succint code chunk.</p>
-<div id="a.-filtering-for-california-observations" class="section level4">
-<h4>a. filtering for California observations</h4>
+<div id="a.-convert-variable-names-to-snake_case-using-janitor" class="section level4">
+<h4>a. convert variable names to snake_case using <code>janitor</code></h4>
+<p>Variable names that include spaces are a pain to work with. Each time you call a variable name, it must be wrapped in backquotes for R to recognize it. Let’s convert them to snake_case to make things easier.</p>
+<pre class="r"><code>pheno_snake &lt;- pheno_data %&gt;% 
+  janitor::clean_names()</code></pre>
+</div>
+<div id="b.-filtering-for-california-observations" class="section level4">
+<h4>b. filtering for California observations</h4>
 <p>This dataset has information on flowering plants for many states, but we’re interested in California flowering plants. First, we’ll filter only for California observations.</p>
-<pre class="r"><code>ca_obs &lt;- pheno_data %&gt;% 
-  filter(State == &quot;CA&quot;)</code></pre>
+<pre class="r"><code>ca_obs &lt;- pheno_snake %&gt;% 
+  filter(state == &quot;CA&quot;)</code></pre>
 </div>
 <div id="b.-select-the-columns-we-want" class="section level4">
 <h4>b. select the columns we want</h4>
-<p>This is a bit more manageable (4291 rows as opposed to 2801 rows) but there are still a lot of columns that we don’t need in order to visualize our data. Let’s select only the columns we’re interested in.</p>
+<p>This is a bit more manageable (2801 rows as opposed to 4291 rows) but there are still a lot of columns that we don’t need in order to visualize our data. Let’s select only the columns we’re interested in.</p>
 <pre class="r"><code>select_columns &lt;- ca_obs %&gt;% 
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month) # you can supply a range of columns, or specify them individually</code></pre>
+  select(5:9, phenophase_description, year, month) # you can supply a range of columns, or specify them individually</code></pre>
 </div>
 <div id="c.-rename-columns" class="section level4">
 <h4>c. rename columns</h4>
 <p>To make this even more manageable, we can change column names to something easier (i.e. shorter to type). For example:</p>
 <pre class="r"><code>rename_columns &lt;- select_columns %&gt;% 
-  rename(Pheno = Phenophase_Description)</code></pre>
+  rename(pheno = phenophase_description)</code></pre>
 </div>
 <div id="d.-unite-columns" class="section level4">
 <h4>d. unite columns</h4>
-<p>We can also combine the <code>Genus</code> and <code>Species</code> into a single column.</p>
+<p>We can also combine the <code>genus</code> and <code>species</code> into a single column.</p>
 <pre class="r"><code>unite_columns &lt;- rename_columns %&gt;% 
-  unite(&quot;Genus_Species&quot;, Genus, Species)</code></pre>
+  unite(&quot;genus_species&quot;, genus, species, sep = &quot;_&quot;) # sep = &quot;_&quot; is the default</code></pre>
 </div>
 <div id="e.-remove-any-na-values" class="section level4">
 <h4>e. remove any NA values</h4>
-<p>If you look at the <code>unite_columns</code> data frame, you’ll see that there are <code>NA</code> values for some of the <code>Year</code> and <code>Month</code> entries. We can take out any rows with <code>NA</code> in either of these columns. <strong>Be aware</strong> that this drops <strong>all</strong> rows that contain ‘NA’ in either <code>Year</code> or <code>Month</code>.</p>
+<p>If you look at the <code>unite_columns</code> data frame, you’ll see that there are <code>NA</code> values for some of the <code>year</code> and <code>month</code> entries. We can take out any rows with <code>NA</code> in either of these columns. <strong>Be aware</strong> that this drops <strong>all</strong> rows that contain ‘NA’ in either <code>year</code> or <code>month</code>.</p>
 <pre class="r"><code>remove_NA &lt;- unite_columns %&gt;% 
-  drop_na(Year, Month)</code></pre>
+  drop_na(year, month)</code></pre>
 </div>
 <div id="f.-set-the-levels-for-a-character-vector" class="section level4">
 <h4>f. set the levels for a character vector</h4>
-<p>Lastly, we’re going to set the levels for the <code>Pheno</code> column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn’t make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the <code>Month</code> and <code>Pheno</code> columns to reflect that for downstream plotting. To do this, we use <code>dplyr::mutate()</code> and <code>forcats::fct_relevel()</code>.</p>
+<p>Lastly, we’re going to set the levels for the <code>pheno</code> column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn’t make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the <code>month</code> and <code>pheno</code> columns to reflect that for downstream plotting. To do this, we use <code>dplyr::mutate()</code> and <code>forcats::fct_relevel()</code>.</p>
 <pre class="r"><code>relevel_month &lt;- remove_NA %&gt;% 
-  mutate(Month = fct_relevel(Month, month.name)) # month.name is a built-in vector of months (in the correct order!)
+  mutate(month = fct_relevel(month, month.name)) # month.name is a built-in vector of months (in the correct order!)
 
 relevel_pheno &lt;- relevel_month %&gt;% 
-  mutate(Pheno = fct_relevel(Pheno, c(&quot;Flowers or flower buds&quot;, &quot;Open flowers&quot;, &quot;Pollen release (flowers)&quot;)))</code></pre>
+  mutate(pheno = fct_relevel(pheno, c(&quot;Flowers or flower buds&quot;, &quot;Open flowers&quot;, &quot;Pollen release (flowers)&quot;)))</code></pre>
 <p>Like <code>group_by()</code>, this doesn’t change the structure of the data frame. It’s a way of telling R, “There’s an order to the objects in this character vector that I want you to remember.”</p>
 </div>
 <div id="now-all-together" class="section level4">
 <h4>Now all together!</h4>
 <p>We split each wrangling step up into a separate data frame, but you could have linked all these functions together in one chunk using the pipe operator, like this:</p>
 <pre class="r"><code>ca_pheno_simple &lt;- pheno_data %&gt;% 
-  filter(State == &quot;CA&quot;) %&gt;%
-  select(1:5, Genus, Species, Common_Name, Phenophase_Description, Year, Month) %&gt;% 
-  rename(Pheno = Phenophase_Description) %&gt;%
-  unite(&quot;Genus_Species&quot;, Genus, Species) %&gt;% 
-  drop_na(Year, Month) %&gt;% 
-  mutate(Pheno = fct_relevel(Pheno, c(&quot;Flowers or flower buds&quot;, &quot;Open flowers&quot;, &quot;Pollen release (flowers)&quot;)),
-         Month = fct_relevel(Month, month.name)) </code></pre>
+  clean_names() %&gt;% 
+  filter(state == &quot;CA&quot;) %&gt;%
+  select(5:9, phenophase_description, year, month) %&gt;% 
+  rename(pheno = phenophase_description) %&gt;%
+  unite(&quot;genus_species&quot;, genus, species) %&gt;% 
+  drop_na(year, month) %&gt;% 
+  mutate(pheno = fct_relevel(pheno, c(&quot;Flowers or flower buds&quot;, &quot;Open flowers&quot;, &quot;Pollen release (flowers)&quot;)),
+         month = fct_relevel(month, month.name)) </code></pre>
 <p>With this simplified and cleaned data set, we’re ready to explore a subset of the desert species we’re most interested in. We love <strong>Joshua trees</strong> (<em>Yucca brevifolia</em>), <strong>creosote bushes</strong> (<em>Larrea tridentata</em>), and <strong>Mojave yucca</strong> (<em>Yucca schidigera</em>) and want to know when these plants are blooming. Let’s first isolate data for these species by:</p>
 <ol style="list-style-type: lower-alpha">
 <li>filtering for only Joshua tree, creosote bush, and Mojave yucca</li>
@@ -396,9 +401,10 @@ relevel_pheno &lt;- relevel_month %&gt;%
 <li>finding the total counts by month, name, and phenophase</li>
 </ol>
 <pre class="r"><code>fav_spp &lt;- ca_pheno_simple %&gt;% 
-  filter(Common_Name == &quot;Joshua tree&quot; | Common_Name == &quot;creosote bush&quot; | Common_Name == &quot;Mojave yucca&quot;) %&gt;%
-  group_by(Month, Common_Name, Pheno) %&gt;% 
+  filter(common_name %in% c(&quot;Joshua tree&quot;, &quot;creosote bush&quot;, &quot;Mojave yucca&quot;)) %&gt;%
+  group_by(month, common_name, pheno) %&gt;% 
   tally() # you could also use summarize() here!</code></pre>
+<p><strong>Note:</strong> You could have also continued to pipe these steps directly into the <code>ca_pheno_simple</code> dataframe rather than creating a separate <code>fav_spp</code> dataframe.</p>
 </div>
 </div>
 <div id="plot" class="section level3">
@@ -410,9 +416,9 @@ relevel_pheno &lt;- relevel_month %&gt;%
 <li>make it pretty</li>
 </ol>
 <p><strong>Note:</strong> Only the first 3 lines of the following code are necessary to make the plot. Everything else simply modifies the appearance and make it a bit more presentable. There are <em>tons</em> of ways to customize plots – we explore only a few options below.</p>
-<pre class="r"><code>fav_plants_plot &lt;- ggplot(fav_spp, aes(x = Month, y = n, fill = Pheno)) + # fill = counts of each phenophase
+<pre class="r"><code>fav_plants_plot &lt;- ggplot(fav_spp, aes(x = month, y = n, fill = pheno)) + # fill = counts of each phenophase
   geom_col(position = &quot;dodge&quot;) + # separate columns for each phenophase (instead of stacked)
-  facet_wrap(~Common_Name) + # create separate panels for each species
+  facet_wrap(~common_name) + # create separate panels for each species
   labs(x = &quot;Month&quot;, y = &quot;Counts&quot;) + # change axis label names
   guides(fill = guide_legend(title = &quot;Phenophase&quot;)) + # rename legend title
   scale_x_discrete(limits = c(month.name)) + # include all months on x-axis, even if there's no data
