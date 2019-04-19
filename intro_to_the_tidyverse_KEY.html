@@ -197,8 +197,8 @@ $(document).ready(function () {
 </tbody>
 </table>
 </div>
-<div id="dont-have-the-tidyverse-andor-janitor-yet" class="section level2">
-<h2><strong>Don’t have the tidyverse and/or janitor yet?</strong></h2>
+<div id="dont-have-the-tidyverse-yet" class="section level2">
+<h2><strong>Don’t have the tidyverse yet?</strong></h2>
 <div id="install-using-the-following-code" class="section level3">
 <h3>Install using the following code:</h3>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
@@ -336,44 +336,44 @@ colnames(pheno_data) # view the columns of df</code></pre>
 <li>set the levels for a character vector</li>
 </ol>
 <p>To demonstrate these individual steps, we’ll perform each function separately. Notice that we perform subsequent function calls on the data frame generated from the prior step. At the end, we’ll show you how to combine all steps into a single, succint code chunk.</p>
-<div id="a.-convert-variable-names-to-snake_case-using-janitor" class="section level4">
-<h4>a. convert variable names to snake_case using <code>janitor</code></h4>
-<p>Variable names that include spaces are a pain to work with. Each time you call a variable name, it must be wrapped in backquotes for R to recognize it. Let’s convert them to snake_case to make things easier.</p>
+<div id="a.-convert-variable-names-to-snake_case-using-janitorclean_names" class="section level4">
+<h4>a. convert variable names to snake_case using <code>janitor::clean_names()</code></h4>
+<p>Variable names that include spaces are a pain to work with. Each time you call a variable name with a space, it must be wrapped in backquotes for R to recognize it. Let’s convert them to snake_case to make things easier.</p>
 <pre class="r"><code>pheno_snake &lt;- pheno_data %&gt;% 
-  janitor::clean_names()</code></pre>
+  clean_names()</code></pre>
 </div>
-<div id="b.-filtering-for-california-observations" class="section level4">
-<h4>b. filtering for California observations</h4>
+<div id="b.-filter-for-california-observations" class="section level4">
+<h4>b. filter for California observations</h4>
 <p>This dataset has information on flowering plants for many states, but we’re interested in California flowering plants. First, we’ll filter only for California observations.</p>
 <pre class="r"><code>ca_obs &lt;- pheno_snake %&gt;% 
   filter(state == &quot;CA&quot;)</code></pre>
 </div>
-<div id="b.-select-the-columns-we-want" class="section level4">
-<h4>b. select the columns we want</h4>
+<div id="c.-select-the-columns-we-want" class="section level4">
+<h4>c. select the columns we want</h4>
 <p>This is a bit more manageable (2801 rows as opposed to 4291 rows) but there are still a lot of columns that we don’t need in order to visualize our data. Let’s select only the columns we’re interested in.</p>
 <pre class="r"><code>select_columns &lt;- ca_obs %&gt;% 
   select(5:9, phenophase_description, year, month) # you can supply a range of columns, or specify them individually</code></pre>
 </div>
-<div id="c.-rename-columns" class="section level4">
-<h4>c. rename columns</h4>
+<div id="d.-rename-columns" class="section level4">
+<h4>d. rename columns</h4>
 <p>To make this even more manageable, we can change column names to something easier (i.e. shorter to type). For example:</p>
 <pre class="r"><code>rename_columns &lt;- select_columns %&gt;% 
   rename(pheno = phenophase_description)</code></pre>
 </div>
-<div id="d.-unite-columns" class="section level4">
-<h4>d. unite columns</h4>
+<div id="e.-unite-columns" class="section level4">
+<h4>e. unite columns</h4>
 <p>We can also combine the <code>genus</code> and <code>species</code> into a single column.</p>
 <pre class="r"><code>unite_columns &lt;- rename_columns %&gt;% 
   unite(&quot;genus_species&quot;, genus, species, sep = &quot;_&quot;) # sep = &quot;_&quot; is the default</code></pre>
 </div>
-<div id="e.-remove-any-na-values" class="section level4">
-<h4>e. remove any NA values</h4>
+<div id="f.-remove-any-na-values" class="section level4">
+<h4>f. remove any NA values</h4>
 <p>If you look at the <code>unite_columns</code> data frame, you’ll see that there are <code>NA</code> values for some of the <code>year</code> and <code>month</code> entries. We can take out any rows with <code>NA</code> in either of these columns. <strong>Be aware</strong> that this drops <strong>all</strong> rows that contain ‘NA’ in either <code>year</code> or <code>month</code>.</p>
 <pre class="r"><code>remove_NA &lt;- unite_columns %&gt;% 
   drop_na(year, month)</code></pre>
 </div>
-<div id="f.-set-the-levels-for-a-character-vector" class="section level4">
-<h4>f. set the levels for a character vector</h4>
+<div id="g.-set-the-levels-for-a-character-vector" class="section level4">
+<h4>g. set the levels for a character vector</h4>
 <p>Lastly, we’re going to set the levels for the <code>pheno</code> column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn’t make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the <code>month</code> and <code>pheno</code> columns to reflect that for downstream plotting. To do this, we use <code>dplyr::mutate()</code> and <code>forcats::fct_relevel()</code>.</p>
 <pre class="r"><code>relevel_month &lt;- remove_NA %&gt;% 
   mutate(month = fct_relevel(month, month.name)) # month.name is a built-in vector of months (in the correct order!)
@@ -404,7 +404,7 @@ relevel_pheno &lt;- relevel_month %&gt;%
   filter(common_name %in% c(&quot;Joshua tree&quot;, &quot;creosote bush&quot;, &quot;Mojave yucca&quot;)) %&gt;%
   group_by(month, common_name, pheno) %&gt;% 
   tally() # you could also use summarize() here!</code></pre>
-<p><strong>Note:</strong> You could have also continued to pipe these steps directly into the <code>ca_pheno_simple</code> dataframe rather than creating a separate <code>fav_spp</code> dataframe.</p>
+<p><strong>Note:</strong> You could have also continued to pipe these steps directly into the <code>ca_pheno_simple</code> data frame rather than creating a separate <code>fav_spp</code> data frame.</p>
 </div>
 </div>
 <div id="plot" class="section level3">

@@ -29,7 +29,7 @@ The tidyverse is a collection of R packages designed for data science that share
 | [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
 | [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
 
-## **Don't have the tidyverse and/or janitor yet?**
+## **Don't have the tidyverse yet?**
 ### Install using the following code:
 
 ```{r, eval = FALSE}
@@ -218,11 +218,11 @@ To demonstrate these individual steps, we'll perform each function separately. N
 
 #### a. convert variable names to snake_case using `janitor::clean_names()`
 
-Variable names that include spaces are a pain to work with. Each time you call a variable name, it must be wrapped in backquotes for R to recognize it. Let's convert them to snake_case to make things easier.
+Variable names that include spaces are a pain to work with. Each time you call a variable name with a space, it must be wrapped in backquotes for R to recognize it. Let's convert them to snake_case to make things easier.
 
 ```{r}
 pheno_snake <- pheno_data %>% 
-  janitor::clean_names()
+  clean_names()
 ```
 
 #### b. filter for California observations
@@ -313,7 +313,7 @@ fav_spp <- ca_pheno_simple %>%
   tally() # you could also use summarize() here!
 ```
 
-**Note:** You could have also continued to pipe these steps directly into the `ca_pheno_simple` dataframe rather than creating a separate `fav_spp` dataframe.
+**Note:** You could have also continued to pipe these steps directly into the `ca_pheno_simple` data frame rather than creating a separate `fav_spp` data frame.
 
 ### Plot:
 
