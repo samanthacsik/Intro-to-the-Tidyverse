@@ -9,24 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## **What is the tidyverse?**
-
-The tidyverse is a collection of R packages designed for data science that share an underlying design philosophy, grammar, and data structures. Using the tidyverse can help to streamline your data manipulation and visualisations (and make this often-daunting process actually enjoyable). [Read more about it here!](https://www.tidyverse.org/) 
-
-## **What packages are in the tidyverse?**
-
-| package | usage | primary functions 
-|-----------|-----------------------------------------|---------------------------------------------------------| 
-| [ggplot2](https://ggplot2.tidyverse.org/) | create graphics | too much to cover here, but we recommend reviewing [Ch 3: Data visualisation](https://r4ds.had.co.nz/data-visualisation.html) in R for Data Science (Wickam & Grolemund 2017)
-| [dplyr](https://dplyr.tidyverse.org/) | data maniupulation | arrange(), filter(), group_by(), mutate(), select(), summarize(), tally()
-| [tidyr](https://tidyr.tidyverse.org/) | transform data to tidy format | gather(), spread()
-| [readr](https://readr.tidyverse.org/) | read in rectangular data (e.g. csv) | read_csv()
-| [purrr](https://purrr.tidyverse.org/) | facilitates work with functions & vectors | map()
-| [tibble](https://tibble.tidyverse.org/) | create tibbles (modernized data frames) | as_tibble(), tibble(), tribble()
-| [stringr](https://stringr.tidyverse.org/) | facilitates work with strings | str_detect, str_count, str_subset(), str_locate(), str_extract(), str_match(), str_replace(), str_split()
-| [forcats](https://forcats.tidyverse.org/) | facilitates work with categorical variables | fct_reorder(), fct_infreq(), fct_relevel(), fct_lump()
-| [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
-
 ## **Don't have the tidyverse yet?**
 ### Install using the following code:
 
@@ -42,15 +24,8 @@ install.packages("tidyverse")
 
 ## **Data wrangling cheat sheet:**
 
-Below are reproducible examples of commonly used tidyverse functions.
-
-**Remember:** you can string together multiple functions using the pipe operator `%>%`. R will evaluate the current function based off the the results of prior function calls.
-
 Let's first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)
 ```{r}
-
-
-
 
 ```
 
@@ -59,8 +34,6 @@ We'll first want to transform 'pizza_data' into tidy (long) format:
 **gather():** transforms data from wide to long format
 ```{r}
 
-
-
 ```
 
 Now let's use our tidy data to practice some further wrangling.
@@ -68,96 +41,50 @@ Now let's use our tidy data to practice some further wrangling.
 **arrange():** order observations as specified (default = alphabetical or ascending)
 ```{r}
 
-
-
-
-
-
 ```
 
 **filter():** select observations within columns
 ```{r}
-
-
-
-
-
 
 ```
 
 **group_by():** groups observations such that data operations are performed at the level of the group
 ```{r}
 
-
-
-
-
 ```
 
 **mutate():** 
 ```{r}
-
-
-
-
-
-
 
 ```
 
 **pull():** pulls out a single variable from a data frame and saves it as a vector
 ```{r}
 
-
-
-
-
 ```
 
 **rename():** rename a column
 ```{r}
-
-
-
-
 
 ```
 
 **select():** select columns to retain and specify their order
 ```{r}
 
-
-
-
-
 ```
 
 **spread():** transform data from long to wide format
 ```{r}
-
-
-
-
-
 
 ```
 
 **summarize():** calculate summary statistics
 ```{r}
 
-
-
-
-
-
 ```
 
 **tally():** sum values across groups
 ```{r}
-
-
-
-
 
 ```
 
@@ -167,10 +94,6 @@ Now let's use our tidy data to practice some further wrangling.
 
 ```{r, message = FALSE, warning = FALSE}
 
-
-
-
-
 ```
 
 ### Load the data: 
@@ -178,8 +101,6 @@ Now let's use our tidy data to practice some further wrangling.
 In celebration of this year's superbloom, we'll be exploring phenometric data of flowering California plants from the [USA -- National Phenology Network](https://www.usanpn.org/home).
 
 ```{r, message = FALSE, warning = TRUE}
-
-
 
 ```
 
@@ -190,10 +111,6 @@ Let's pretend we're trying to plan a getaway to the Joshua Tree National Park an
 We should first familiarize ourselves with the data. 
 
 ```{r, eval = FALSE}
-
-
-
-
 
 ```
 
@@ -207,91 +124,53 @@ c.
 d.   
 e.  
 f. 
+g.
 
-To demonstrate these individual steps, we'll perform each function separately. Notice that we perform subsequent function calls on the data frame generated from the prior step. At the end, we'll show you how to combine all steps into a single, succint code chunk.
-
-#### a. filtering for California observations
-
-This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
+#### a. convert variable names to snake_case using `janitor::clean_names()`
 
 ```{r}
 
-
-
-
 ```
 
-#### b. select the columns we want
-
-This is a bit more manageable (`r nrow(pheno_data)` rows as opposed to `r nrow(ca_obs)` rows) but there are still a lot of columns that we don't need in order to visualize our data. Let's select only the columns we're interested in.
+#### b. filter for California observations
 
 ```{r}
 
-
-
-
 ```
 
-#### c. rename columns
-
-To make this even more manageable, we can change column names to something easier (i.e. shorter to type). For example:
+#### c. select the columns we want
 
 ```{r}
 
-
-
-
-
 ```
 
-#### d. unite columns
-
-We can also combine the `Genus` and `Species` into a single column.
+#### d. rename columns
 
 ```{r}
 
-
-
-
-
 ```
 
-#### e. remove any NA values
-
-If you look at the `unite_columns` data frame, you'll see that there are `NA` values for some of the `Year` and `Month` entries. We can take out any rows with `NA` in either of these columns. **Be aware** that this drops **all** rows that contain 'NA' in either `Year` or `Month`.
+#### e. unite columns
 
 ```{r}
 
-
-
-
-
 ```
 
-#### f. set the levels for a character vector
-
-Lastly, we're going to set the levels for the `Pheno` column. When R is given a character vector, its default is to consider the objects in the vector in alphabetical order, but sometimes that doesn't make sense. Each phenophase comes in a specific order in nature, so we want to set the levels of the `Month` and `Pheno` columns to reflect that for downstream plotting. To do this, we use `dplyr::mutate()` and `forcats::fct_relevel()`.
+#### f. remove any NA values
 
 ```{r}
 
-
-
-
-
 ```
 
-Like `group_by()`, this doesn't change the structure of the data frame. It's a way of telling R, "There's an order to the objects in this character vector that I want you to remember."
+#### g. set the levels for a character vector
+
+```{r}
+
+```
 
 #### Now all together!
 
-We split each wrangling step up into a separate data frame, but you could have linked all these functions together in one chunk using the pipe operator, like this:
-
 ```{r}
-
-
-
-
-
 
 ```
 
@@ -303,25 +182,14 @@ c.
 
 ```{r}
 
-
-
-
-
 ```
 
 ### Plot:
-
-Now that we have our data tallied and in tidy format, we're ready to make a plot! We want to:
 
 a. 
 b. 
 c. 
 
 ```{r, fig.align = 'center', fig.width = 15, fig.height = 10}
-
-
-
-
-
 
 ```
