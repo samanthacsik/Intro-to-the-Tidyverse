@@ -225,7 +225,7 @@ pheno_snake <- pheno_data %>%
   janitor::clean_names()
 ```
 
-#### b. filtering for California observations
+#### b. filter for California observations
 
 This dataset has information on flowering plants for many states, but we're interested in California flowering plants. First, we'll filter only for California observations.
 
