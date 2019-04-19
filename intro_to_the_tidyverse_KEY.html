@@ -235,6 +235,7 @@ pizza_data &lt;- tribble(
 
 ordered_num_pizzas &lt;- tidy_pizza %&gt;% 
   arrange(pizzas_eaten) # for descending order, use &quot;arrange(-pizzas_eaten)&quot;</code></pre>
+<p><strong>clean_names():</strong> converts all variable names to snake_case</p>
 <p><strong>filter():</strong> select observations within columns</p>
 <pre class="r"><code>sam_an &lt;- tidy_pizza %&gt;% 
   filter(name == &quot;Sam&quot; | name == &quot;An&quot;) # &quot;|&quot; tells R to filter any observations that match &quot;Sam&quot; OR &quot;An&quot;

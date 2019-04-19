@@ -83,6 +83,9 @@ ordered_num_pizzas <- tidy_pizza %>%
   arrange(pizzas_eaten) # for descending order, use "arrange(-pizzas_eaten)"
 ```
 
+**clean_names():** converts all variable names to snake_case
+
+
 **filter():** select observations within columns
 ```{r}
 sam_an <- tidy_pizza %>% 
