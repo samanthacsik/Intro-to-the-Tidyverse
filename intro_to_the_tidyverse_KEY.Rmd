@@ -30,7 +30,7 @@ The tidyverse is a collection of R packages designed for data science that share
 | [magrittr](https://magrittr.tidyverse.org/) | facilitates sequential modification of a data frame | %>% 
 
 ## **Don't have the tidyverse yet?**
-### Install using the following code:
+### Install using the following code: 
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
@@ -118,9 +118,9 @@ fav_pizza <- tidy_pizza %>%
     )
   )
 
-# use mutate in conjunction with ifelse, where if the observation in the 'name' column matches "Sam," report "1". If not, report "0"
-binary <- tidy_pizza %>% 
-  mutate(binary = ifelse(name == "Sam", "1", "0")) 
+# use mutate in conjunction with ifelse, where if the observation in the 'name' column matches "Sam" or "An", report "yes". If not, report "no"
+allergies <- tidy_pizza %>% 
+  mutate(food_allergies = ifelse(name %in% c("Sam", "An"), "yes", "no")) 
 ```
 
 **pull():** pulls out a single variable from a data frame and saves it as a vector

@@ -263,9 +263,9 @@ fav_pizza &lt;- tidy_pizza %&gt;%
     )
   )
 
-# use mutate in conjunction with ifelse, where if the observation in the 'name' column matches &quot;Sam,&quot; report &quot;1&quot;. If not, report &quot;0&quot;
-binary &lt;- tidy_pizza %&gt;% 
-  mutate(binary = ifelse(name == &quot;Sam&quot;, &quot;1&quot;, &quot;0&quot;)) </code></pre>
+# use mutate in conjunction with ifelse, where if the observation in the 'name' column matches &quot;Sam&quot; or &quot;An&quot;, report &quot;yes&quot;. If not, report &quot;no&quot;
+allergies &lt;- tidy_pizza %&gt;% 
+  mutate(food_allergies = ifelse(name %in% c(&quot;Sam&quot;, &quot;An&quot;), &quot;yes&quot;, &quot;no&quot;)) </code></pre>
 <p><strong>pull():</strong> pulls out a single variable from a data frame and saves it as a vector</p>
 <pre class="r"><code>pizza_eaten_vec &lt;- tidy_pizza %&gt;% 
   pull(pizzas_eaten)</code></pre>
