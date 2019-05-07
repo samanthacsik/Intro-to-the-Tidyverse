@@ -133,50 +133,6 @@ e.
 f. 
 g.
 
-#### a. convert variable names to snake_case using `janitor::clean_names()`
-
-```{r}
-
-```
-
-#### b. filter for California observations
-
-```{r}
-
-```
-
-#### c. select the columns we want
-
-```{r}
-
-```
-
-#### d. rename columns
-
-```{r}
-
-```
-
-#### e. unite columns
-
-```{r}
-
-```
-
-#### f. remove any NA values
-
-```{r}
-
-```
-
-#### g. set the levels for a character vector
-
-```{r}
-
-```
-
-#### Now all together!
-
 ```{r}
 
 ```
