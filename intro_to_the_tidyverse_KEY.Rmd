@@ -100,7 +100,7 @@ grouped_names <- tidy_pizza %>%
 ```{r}
 # use mutate() to coerce a variable to a different data type
 name_as_factor <- tidy_pizza %>% 
-  mutate(name = as.factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
+  mutate(name = as_factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
 
 # use mutate() to calculate a new value using existing observations and add this new value to a new column
 pizzas_per_month <- tidy_pizza %>% 

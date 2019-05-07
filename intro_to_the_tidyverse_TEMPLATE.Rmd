@@ -19,7 +19,7 @@ install.packages("tidyverse")
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
-
+ 
 ```
 
 ## **Data wrangling cheat sheet:**
