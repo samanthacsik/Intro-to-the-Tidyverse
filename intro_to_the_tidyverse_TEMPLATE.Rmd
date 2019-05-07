@@ -19,7 +19,7 @@ install.packages("tidyverse")
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
-library(tidyverse)
+
 ```
 
 ## **Data wrangling cheat sheet:**
