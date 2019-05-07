@@ -19,14 +19,21 @@ install.packages("tidyverse")
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
-
+library(tidyverse)
 ```
 
 ## **Data wrangling cheat sheet:**
 
 Let's first create some completely hypothetical data about the number of pizzas eaten by Sam, An, Allison, Julie, and Jamie over the past 3 years :)
 ```{r}
-
+pizza_data <- tribble(
+  ~name,    ~`2017`,   ~`2018`,   ~`2019`, 
+  "Sam",       25,        20,        16,   
+  "An",        20,        15,        11,  
+  "Allison",   18,        17,        10,
+  "Julie",     19,        10,        14,
+  "Jamie",     21,        13,        14
+  )
 ```
 
 We'll first want to transform 'pizza_data' into tidy (long) format:
