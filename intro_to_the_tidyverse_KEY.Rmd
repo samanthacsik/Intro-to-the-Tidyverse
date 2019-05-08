@@ -63,9 +63,9 @@ pizza_data <- tribble(
 ```
 
 It's a great habit to always familiarize/explore your data before starting to wrangle it:
-```{r}
+```{r, eval = FALSE}
 str(pizza_data) # view data structures of pizza_data
-col_names(pizza_data) # view columns of pizza_data
+colnames(pizza_data) # view columns of pizza_data
 head(pizza_data) # view first 10 rows of pizza_data 
 ```
 
@@ -163,7 +163,7 @@ allergies <- tidy_pizza %>%
 **`group_by()`** groups observations such that data operations are performed at the level of the group
 ```{r}
 grouped_names <- tidy_pizza %>% 
-  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
+  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example
 ```
 
 **`summarize()`** calculate summary statistics
