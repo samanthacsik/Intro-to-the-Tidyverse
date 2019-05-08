@@ -36,61 +36,65 @@ pizza_data <- tribble(
   )
 ```
 
-We'll first want to transform 'pizza_data' into tidy (long) format:
-
-**gather():** transforms data from wide to long format
+It's a great habit to always familiarize/explore your data before starting to wrangle it:
 ```{r}
 
 ```
 
-Now let's use our tidy data to practice some further wrangling.
-
-**arrange():** order observations as specified (default = alphabetical or ascending)
+**`gather()`** transforms data from wide to long format
 ```{r}
 
 ```
 
-**filter():** select observations within columns
+**`spread()`** transform data from long to wide format
 ```{r}
 
 ```
 
-**group_by():** groups observations such that data operations are performed at the level of the group
+From here on, we'll be working with our **tidy data** i.e. **`tidy_pizza`** to practice some useful wrangling functions.
+
+### Subsetting data: 
+
+**`select()`** select columns to retain and specify their order
 ```{r}
 
 ```
 
-**mutate():** 
+**`filter()`** select observations within columns 
 ```{r}
 
 ```
 
-**pull():** pulls out a single variable from a data frame and saves it as a vector
+### Manipulating/adding variables:
+
+**`arrange()`** order observations as specified (default = alphabetical or ascending)
 ```{r}
 
 ```
 
-**rename():** rename a column
+**`rename()`** rename a column
 ```{r}
 
 ```
 
-**select():** select columns to retain and specify their order
+**`mutate()`** a versatile function
 ```{r}
 
 ```
 
-**spread():** transform data from long to wide format
+### Summarizing data: 
+
+**`group_by()`** groups observations such that data operations are performed at the level of the group
 ```{r}
 
 ```
 
-**summarize():** calculate summary statistics
+**`summarize()`** calculate summary statistics
 ```{r}
 
 ```
 
-**tally():** sum values across groups
+**`tally()`** sum values across groups
 ```{r}
 
 ```
