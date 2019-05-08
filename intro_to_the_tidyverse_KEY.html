@@ -222,30 +222,40 @@ pizza_data &lt;- tribble(
   &quot;Julie&quot;,     19,        10,        14,
   &quot;Jamie&quot;,     21,        13,        14
   )</code></pre>
-<p>We’ll first want to transform ‘pizza_data’ into tidy (long) format:</p>
-<p><strong>gather():</strong> transforms data from wide to long format</p>
+<p>We’ll first want to transform ‘pizza_data’ into <a href="https://r4ds.had.co.nz/tidy-data.html">tidy</a> (long) format:</p>
+<p><strong><code>gather()</code></strong> transforms data from wide to long format</p>
 <pre class="r"><code>tidy_pizza &lt;- pizza_data %&gt;% 
   gather(`2017`, `2018`, `2019`, key = year, value = pizzas_eaten)</code></pre>
-<p>Now let’s use our tidy data to practice some further wrangling.</p>
-<p><strong>arrange():</strong> order observations as specified (default = alphabetical or ascending)</p>
+<p>Conversely, you can transform ‘tidy_pizza’ back to wide format:</p>
+<p><strong><code>spread()</code></strong> transform data from long to wide format</p>
+<pre class="r"><code># let's convert our 'tidy_pizza' data back to wide format using spread()
+back_to_wide &lt;- tidy_pizza %&gt;% 
+  spread(key = year, value = pizzas_eaten)</code></pre>
+<p>From here on, we’ll be working with our <strong>tidy data</strong> i.e. <strong><code>tidy_pizza</code></strong> to practice some useful wrangling functions:</p>
+<div id="subsetting-data" class="section level3">
+<h3>Subsetting data:</h3>
+<p><strong><code>select()</code></strong> select columns to retain and specify their order</p>
+<pre class="r"><code>names_pizzas &lt;- tidy_pizza %&gt;% 
+  select(name, pizzas_eaten)</code></pre>
+<p><strong><code>pull()</code></strong> pulls out a single variable from a data frame and saves it as a vector</p>
+<pre class="r"><code>pizza_eaten_vec &lt;- tidy_pizza %&gt;% 
+  pull(pizzas_eaten)</code></pre>
+</div>
+<div id="manipulatingadding-variables" class="section level3">
+<h3>Manipulating/adding variables:</h3>
+<p><strong><code>arrange()</code></strong> order observations as specified (default = alphabetical or ascending)</p>
 <pre class="r"><code>ordered_names &lt;- tidy_pizza %&gt;% 
   arrange(name) # for descending alphabetical order, use &quot;arrange(desc(names))&quot;
 
 ordered_num_pizzas &lt;- tidy_pizza %&gt;% 
   arrange(pizzas_eaten) # for descending order, use &quot;arrange(-pizzas_eaten)&quot;</code></pre>
-<p><strong>filter():</strong> select observations within columns</p>
-<pre class="r"><code>sam_an &lt;- tidy_pizza %&gt;% 
-  filter(name == &quot;Sam&quot; | name == &quot;An&quot;) # &quot;|&quot; tells R to filter any observations that match &quot;Sam&quot; OR &quot;An&quot;
-
-sam_an_alt &lt;- tidy_pizza %&gt;% 
-  filter(name %in% c(&quot;Sam&quot;, &quot;An&quot;)) # another way of filtering</code></pre>
-<p><strong>group_by():</strong> groups observations such that data operations are performed at the level of the group</p>
-<pre class="r"><code>grouped_names &lt;- tidy_pizza %&gt;% 
-  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.</code></pre>
-<p><strong>mutate():</strong></p>
+<p><strong><code>rename()</code></strong> rename a column</p>
+<pre class="r"><code>renamed_pizzas &lt;- tidy_pizza %&gt;% 
+  rename(total_pizzas = pizzas_eaten)</code></pre>
+<p><strong><code>mutate()</code></strong></p>
 <pre class="r"><code># use mutate() to coerce a variable to a different data type
 name_as_factor &lt;- tidy_pizza %&gt;% 
-  mutate(name = as.factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
+  mutate(name = as_factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
 
 # use mutate() to calculate a new value using existing observations and add this new value to a new column
 pizzas_per_month &lt;- tidy_pizza %&gt;% 
@@ -266,20 +276,13 @@ fav_pizza &lt;- tidy_pizza %&gt;%
 # use mutate in conjunction with ifelse, where if the observation in the 'name' column matches &quot;Sam&quot; or &quot;An&quot;, report &quot;yes&quot;. If not, report &quot;no&quot;
 allergies &lt;- tidy_pizza %&gt;% 
   mutate(food_allergies = ifelse(name %in% c(&quot;Sam&quot;, &quot;An&quot;), &quot;yes&quot;, &quot;no&quot;)) </code></pre>
-<p><strong>pull():</strong> pulls out a single variable from a data frame and saves it as a vector</p>
-<pre class="r"><code>pizza_eaten_vec &lt;- tidy_pizza %&gt;% 
-  pull(pizzas_eaten)</code></pre>
-<p><strong>rename():</strong> rename a column</p>
-<pre class="r"><code>renamed_pizzas &lt;- tidy_pizza %&gt;% 
-  rename(total_pizzas = pizzas_eaten)</code></pre>
-<p><strong>select():</strong> select columns to retain and specify their order</p>
-<pre class="r"><code>names_pizzas &lt;- tidy_pizza %&gt;% 
-  select(name, pizzas_eaten)</code></pre>
-<p><strong>spread():</strong> transform data from long to wide format</p>
-<pre class="r"><code># let's convert our 'tidy_pizza' data back to wide format using spread()
-back_to_wide &lt;- tidy_pizza %&gt;% 
-  spread(key = year, value = pizzas_eaten)</code></pre>
-<p><strong>summarize():</strong> calculate summary statistics</p>
+</div>
+<div id="summarizing-data" class="section level3">
+<h3>Summarizing data:</h3>
+<p><strong><code>group_by()</code></strong> groups observations such that data operations are performed at the level of the group</p>
+<pre class="r"><code>grouped_names &lt;- tidy_pizza %&gt;% 
+  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.</code></pre>
+<p><strong><code>summarize()</code></strong> calculate summary statistics</p>
 <pre class="r"><code>pizza_summary &lt;- tidy_pizza %&gt;% 
   group_by(name) %&gt;% 
   summarize(
@@ -287,10 +290,11 @@ back_to_wide &lt;- tidy_pizza %&gt;%
     max_pizza = max(pizzas_eaten),
     min_pizza = min(pizzas_eaten) # and add as many as you want to calculate!
   )</code></pre>
-<p><strong>tally():</strong> sum values across groups</p>
+<p><strong><code>tally()</code></strong> sum values across groups</p>
 <pre class="r"><code>tallied_pizza &lt;- tidy_pizza %&gt;% 
   group_by(name) %&gt;% 
   tally(pizzas_eaten)</code></pre>
+</div>
 </div>
 <div id="now-lets-practice" class="section level2">
 <h2><strong>Now let’s practice!</strong></h2>

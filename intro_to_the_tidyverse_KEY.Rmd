@@ -62,17 +62,61 @@ pizza_data <- tribble(
   )
 ```
 
-We'll first want to transform 'pizza_data' into tidy (long) format:
+It's a great habit to always familiarize/explore your data before starting to wrangle it:
+```{r}
+str(pizza_data) # view data structures of pizza_data
+col_names(pizza_data) # view columns of pizza_data
+head(pizza_data) # view first 10 rows of pizza_data 
+```
 
-**gather():** transforms data from wide to long format
+We'll first want to transform 'pizza_data' into [tidy](https://r4ds.had.co.nz/tidy-data.html) (long) format:
+
+**`gather()`** transforms data from wide to long format
 ```{r}
 tidy_pizza <- pizza_data %>% 
   gather(`2017`, `2018`, `2019`, key = year, value = pizzas_eaten)
 ```
 
-Now let's use our tidy data to practice some further wrangling.
+Conversely, you can transform 'tidy_pizza' back to wide format: 
 
-**arrange():** order observations as specified (default = alphabetical or ascending)
+**`spread()`** transform data from long to wide format
+```{r}
+# let's convert our 'tidy_pizza' data back to wide format using spread()
+back_to_wide <- tidy_pizza %>% 
+  spread(key = year, value = pizzas_eaten)
+```
+
+From here on, we'll be working with our **tidy data** i.e. **`tidy_pizza`** to practice some useful wrangling functions.
+
+### Subsetting data: 
+
+**`select()`** select columns to retain and specify their order
+```{r}
+names_pizzas <- tidy_pizza %>% 
+  select(name, pizzas_eaten)
+```
+
+**`filter()`** select observations within columns 
+```{r}
+sam_an <- tidy_pizza %>% 
+  filter(name == "Sam" | name == "An") # "|" tells R to filter any observations that match "Sam" OR "An"
+
+sam_an_alt <- tidy_pizza %>% 
+  filter(name %in% c("Sam", "An")) # another way of filtering
+
+not_sam <- tidy_pizza %>% # 
+  filter(name != "Sam") # != tells R to filter any observations that DO NOT match "Sam"
+```
+
+**`pull()`** pull out a single variable from a data frame and save it as a vector
+```{r}
+pizza_eaten_vec <- tidy_pizza %>% 
+  pull(pizzas_eaten)
+```
+
+### Manipulating/adding variables:
+
+**`arrange()`** order observations as specified (default = alphabetical or ascending)
 ```{r}
 ordered_names <- tidy_pizza %>% 
   arrange(name) # for descending alphabetical order, use "arrange(desc(names))"
@@ -81,22 +125,13 @@ ordered_num_pizzas <- tidy_pizza %>%
   arrange(pizzas_eaten) # for descending order, use "arrange(-pizzas_eaten)"
 ```
 
-**filter():** select observations within columns
+**`rename()`** rename a column
 ```{r}
-sam_an <- tidy_pizza %>% 
-  filter(name == "Sam" | name == "An") # "|" tells R to filter any observations that match "Sam" OR "An"
-
-sam_an_alt <- tidy_pizza %>% 
-  filter(name %in% c("Sam", "An")) # another way of filtering
+renamed_pizzas <- tidy_pizza %>% 
+  rename(total_pizzas = pizzas_eaten)
 ```
 
-**group_by():** groups observations such that data operations are performed at the level of the group
-```{r}
-grouped_names <- tidy_pizza %>% 
-  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
-```
-
-**mutate():**
+**`mutate()`** a versatile function
 ```{r}
 # use mutate() to coerce a variable to a different data type
 name_as_factor <- tidy_pizza %>% 
@@ -123,32 +158,15 @@ allergies <- tidy_pizza %>%
   mutate(food_allergies = ifelse(name %in% c("Sam", "An"), "yes", "no")) 
 ```
 
-**pull():** pulls out a single variable from a data frame and saves it as a vector
+### Summarizing data: 
+
+**`group_by()`** groups observations such that data operations are performed at the level of the group
 ```{r}
-pizza_eaten_vec <- tidy_pizza %>% 
-  pull(pizzas_eaten)
+grouped_names <- tidy_pizza %>% 
+  group_by(name) # notice that nothing appears to change when you view 'grouped_df.' See the summarize() function below for further example.
 ```
 
-**rename():** rename a column
-```{r}
-renamed_pizzas <- tidy_pizza %>% 
-  rename(total_pizzas = pizzas_eaten)
-```
-
-**select():** select columns to retain and specify their order
-```{r}
-names_pizzas <- tidy_pizza %>% 
-  select(name, pizzas_eaten)
-```
-
-**spread():** transform data from long to wide format
-```{r}
-# let's convert our 'tidy_pizza' data back to wide format using spread()
-back_to_wide <- tidy_pizza %>% 
-  spread(key = year, value = pizzas_eaten)
-```
-
-**summarize():** calculate summary statistics
+**`summarize()`** calculate summary statistics
 ```{r}
 pizza_summary <- tidy_pizza %>% 
   group_by(name) %>% 
@@ -159,7 +177,7 @@ pizza_summary <- tidy_pizza %>%
   )
 ```
 
-**tally():** sum values across groups
+**`tally()`** sum values across groups
 ```{r}
 tallied_pizza <- tidy_pizza %>% 
   group_by(name) %>% 
