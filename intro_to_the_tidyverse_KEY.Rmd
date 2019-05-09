@@ -133,10 +133,6 @@ renamed_pizzas <- tidy_pizza %>%
 
 **`mutate()`** a versatile function
 ```{r}
-# use mutate() to coerce a variable to a different data type
-name_as_factor <- tidy_pizza %>% 
-  mutate(name = as_factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
-
 # use mutate() to calculate a new value using existing observations and add this new value to a new column
 pizzas_per_month <- tidy_pizza %>% 
   mutate(pizzas_per_month = pizzas_eaten/12)
@@ -156,6 +152,10 @@ fav_pizza <- tidy_pizza %>%
 # use mutate in conjunction with ifelse, where if the observation in the 'name' column matches "Sam" or "An", report "yes". If not, report "no"
 allergies <- tidy_pizza %>% 
   mutate(food_allergies = ifelse(name %in% c("Sam", "An"), "yes", "no")) 
+
+# use mutate() to coerce a variable to a different data type
+name_as_factor <- tidy_pizza %>% 
+  mutate(name = as_factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
 ```
 
 ### Summarizing data: 

@@ -266,11 +266,7 @@ ordered_num_pizzas &lt;- tidy_pizza %&gt;%
 <pre class="r"><code>renamed_pizzas &lt;- tidy_pizza %&gt;% 
   rename(total_pizzas = pizzas_eaten)</code></pre>
 <p><strong><code>mutate()</code></strong> a versatile function</p>
-<pre class="r"><code># use mutate() to coerce a variable to a different data type
-name_as_factor &lt;- tidy_pizza %&gt;% 
-  mutate(name = as_factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'
-
-# use mutate() to calculate a new value using existing observations and add this new value to a new column
+<pre class="r"><code># use mutate() to calculate a new value using existing observations and add this new value to a new column
 pizzas_per_month &lt;- tidy_pizza %&gt;% 
   mutate(pizzas_per_month = pizzas_eaten/12)
 
@@ -288,7 +284,11 @@ fav_pizza &lt;- tidy_pizza %&gt;%
 
 # use mutate in conjunction with ifelse, where if the observation in the 'name' column matches &quot;Sam&quot; or &quot;An&quot;, report &quot;yes&quot;. If not, report &quot;no&quot;
 allergies &lt;- tidy_pizza %&gt;% 
-  mutate(food_allergies = ifelse(name %in% c(&quot;Sam&quot;, &quot;An&quot;), &quot;yes&quot;, &quot;no&quot;)) </code></pre>
+  mutate(food_allergies = ifelse(name %in% c(&quot;Sam&quot;, &quot;An&quot;), &quot;yes&quot;, &quot;no&quot;)) 
+
+# use mutate() to coerce a variable to a different data type
+name_as_factor &lt;- tidy_pizza %&gt;% 
+  mutate(name = as_factor(name)) # you can check that this worked by viewing 'str(name_as_factor)'</code></pre>
 </div>
 <div id="summarizing-data" class="section level3">
 <h3>Summarizing data:</h3>
