@@ -276,7 +276,7 @@ We can also combine the `genus` and `species` into a single column.
 
 ```{r}
 unite_columns <- rename_columns %>% 
-  unite("genus_species", genus, species, sep = "_") # sep = "_" is the default
+  unite(genus_species, genus, species, sep = "_") # sep = "_" is the default
 ```
 
 #### f. remove any NA values
@@ -347,11 +347,10 @@ c. make it pretty
 fav_plants_plot <- ggplot(fav_spp, aes(x = month, y = n, fill = pheno)) + # fill = counts of each phenophase
   geom_col(position = "dodge") + # separate columns for each phenophase (instead of stacked)
   facet_wrap(~common_name) + # create separate panels for each species
-  labs(x = "Month", y = "Counts") + # change axis label names
-  guides(fill = guide_legend(title = "Phenophase")) + # rename legend title
+  labs(x = "Month", y = "Counts", fill = "Phenophase") + # change axis labels and legend names 
   scale_x_discrete(limits = c(month.name)) + # include all months on x-axis, even if there's no data
   scale_y_continuous(expand = c(0,0), breaks = seq(0, 20, by = 3)) + # remove space between columns and x-axis; set y-axis tick mark interval
-  scale_fill_manual(values = c("darkseagreen", "lightpink2")) + # change colors
+  scale_fill_manual(values = c("darkseagreen3", "cadetblue")) + # change colors
   theme_classic() + 
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7), 
         axis.text.x = element_text(angle = 45, hjust = 0.9)) 
