@@ -19,7 +19,7 @@ install.packages("tidyverse")
 ### Load the tidyverse:
 
 ```{r, message = FALSE, warning = FALSE}
- 
+
 ```
 
 ## **Data wrangling cheat sheet:**
@@ -129,13 +129,13 @@ We should first familiarize ourselves with the data.
 
 This dataset is *huge*--we'll want to wrangle it so that it only includes the information that we're interested in. We will:
 
-a.   
+a.  
 b. 
-c.   
-d.   
-e.  
+c. 
+d. 
+e. 
 f. 
-g.
+g. 
 
 ```{r}
 
