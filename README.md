@@ -2,6 +2,9 @@
 R-Ladies Meetup May 2019  
 Leaders: An Bui, Sam Csik
 
+## Getting started
+If you are participating in the workshop, you may either (a) work on the intro_to_the_tidyverse_TEMPLATE.Rmd, which leaves space for participants to type code alongside the instructors, or (b) follow along in the intro_to_the_tidyverse_KEY.Rmd, which has all of the information and code we will be reviewing. Download the intro_to_the_tidyverse_KEY.html for a knitted (and much easier to read) version of the KEY. Data
+
 ## Outline
 1. What is the tidyverse?
 2. Useful functions to know
