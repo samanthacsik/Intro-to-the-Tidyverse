@@ -14,7 +14,7 @@ If you are participating in the workshop, you may either (a) work on the [intro_
 All flower phenology data is from the [USA Phenology Network](https://www.usanpn.org/usa-national-phenology-network). In this workshop, we work with species that occur on [Serrano](https://www.sanmanuel-nsn.gov/Culture/Cultural-Overview), [Cahuilla](http://www.aguacaliente.org/content/History%20and%20Culture/), [Mojave](https://www.fortmojaveindiantribe.com/), and [Chemehuevi](http://www.chemehuevi.net/history-culture/) ancestral land, or [Joshua Tree National Park](https://www.nps.gov/jotr/index.htm).
 
 ## Species of interest
-We're interested in blooming desert plants:
+We'll be wrangling and plotting data for a subset of blooming desert plants:
 
 |     Common name     |      Scientific name      |                     Flowers                        |
 |---------------------|---------------------------|----------------------------------------------------| 
