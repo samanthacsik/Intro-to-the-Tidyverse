@@ -1,5 +1,5 @@
 # Intro-to-the-Tidyverse
-R-Ladies Meetup May 2019  
+R-Ladies Santa Barbara Meetup May 2019  
 Leaders: An Bui, Sam Csik
 
 ## Getting started
