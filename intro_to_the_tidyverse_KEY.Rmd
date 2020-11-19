@@ -1,5 +1,10 @@
 ---
 title: 'Intro to the Tidyverse: R-Ladies SB May 2019'
+knit: (function(input_file, encoding) {
+  out_dir <- 'knitted_doc';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'intro_to_the_tidyverse.html'))})
 author: "An Bui & Sam Csik"
 date: "15 May 2019"
 output: html_document
