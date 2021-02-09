@@ -2,6 +2,8 @@
 R-Ladies Santa Barbara Meetup May 2019  
 Leaders: An Bui, Sam Csik
 
+RPubs (published knitted html) can be found [here](https://rpubs.com/scsik/RladiesSB-intro-to-the-tidyverse).
+
 ## Getting started
 If you are participating in the workshop, you may either (a) work on the [intro_to_the_tidyverse_TEMPLATE.Rmd](https://github.com/samanthacsik/Intro-to-the-Tidyverse/blob/master/intro_to_the_tidyverse_TEMPLATE.Rmd), which leaves space for participants to type code alongside the instructors, or (b) follow along in the [intro_to_the_tidyverse_KEY.Rmd](https://github.com/samanthacsik/Intro-to-the-Tidyverse/blob/master/intro_to_the_tidyverse_KEY.Rmd), which has all of the information and code we will be reviewing. Download the [intro_to_the_tidyverse_KEY.html](https://github.com/samanthacsik/Intro-to-the-Tidyverse/blob/master/intro_to_the_tidyverse_KEY.html) for a knitted (and much easier to read) version of the KEY.
 
