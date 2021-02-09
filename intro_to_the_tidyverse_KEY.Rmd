@@ -76,19 +76,19 @@ head(pizza_data) # view first 10 rows of pizza_data
 
 We'll first want to transform 'pizza_data' into [tidy](https://r4ds.had.co.nz/tidy-data.html) (long) format:
 
-**`gather()`** transforms data from wide to long format
+**pivot_longer()** transforms data from wide to long format (NOTE: this function is an updated approach to `gather()`, which is no longer under active development)
 ```{r}
 tidy_pizza <- pizza_data %>% 
-  gather(`2017`, `2018`, `2019`, key = year, value = pizzas_eaten)
+  pivot_longer(cols = c(`2017`, `2018`, `2019`), names_to = "year", values_to = "pizzas_eaten")
 ```
 
 Conversely, you can transform 'tidy_pizza' back to wide format: 
 
-**`spread()`** transform data from long to wide format
+**`pivot_wider()`** transform data from long to wide format (NOTE: this function is an updated approach to `spread()`, which is no longer under active development)
 ```{r}
 # let's convert our 'tidy_pizza' data back to wide format using spread()
 back_to_wide <- tidy_pizza %>% 
-  spread(key = year, value = pizzas_eaten)
+  pivot_wider(names_from = year, values_from = pizzas_eaten)
 ```
 
 From here on, we'll be working with our **tidy data** i.e. **`tidy_pizza`** to practice some useful wrangling functions.
